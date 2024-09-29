@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Notes</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #000;
+            border-bottom: 2px solid #000;
+            padding-bottom: 10px;
+        }
+        #content-container, #folder-list {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #folder-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        #folder-list li {
+            margin-bottom: 10px;
+        }
+        #folder-list a {
+            display: block;
+            padding: 10px;
+            background-color: #f0f0f0;
+            color: #333;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        #folder-list a:hover {
+            background-color: #e0e0e0;
+        }
+        #audio-player {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .no-audio {
+            color: #999;
+            font-style: italic;
+        }
+        /* Markdown Styles */
+        #notes-container h1, #notes-container h2, #notes-container h3, #notes-container h4, #notes-container h5, #notes-container h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+        #notes-container h1 { font-size: 2em; }
+        #notes-container h2 { font-size: 1.5em; }
+        #notes-container h3 { font-size: 1.25em; }
+        #notes-container h4 { font-size: 1em; }
+        #notes-container h5 { font-size: 0.875em; }
+        #notes-container h6 { font-size: 0.85em; }
+        #notes-container p, #notes-container ul, #notes-container ol {
+            margin-bottom: 16px;
+        }
+        #notes-container code {
+            background-color: #f0f0f0;
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 85%;
+        }
+        #notes-container pre {
+            background-color: #f6f8fa;
+            border-radius: 3px;
+            padding: 16px;
+            overflow: auto;
+        }
+        #notes-container blockquote {
+            border-left: 4px solid #dfe2e5;
+            color: #6a737d;
+            padding: 0 1em;
+            margin: 0 0 16px 0;
+        }
+        #notes-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        #notes-container table {
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+        #notes-container table th, #notes-container table td {
+            border: 1px solid #dfe2e5;
+            padding: 6px 13px;
+        }
+        #notes-container table tr:nth-child(2n) {
+            background-color: #f6f8fa;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007AFF;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Notes</h1>
+    <div id="content-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+    <script>
+        async function fetchFolders() {
+            try {
+                const response = await fetch('folders.json');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch folders');
+                }
+                const folders = await response.json();
+                displayFolderList(folders);
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('content-container').innerHTML = '<p>Error loading folders. Please make sure the folders.json file exists and is accessible.</p>';
+            }
+        }
+
+        function displayFolderList(folders) {
+            const contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = '<h2>Software Engineering Study Notes</h2>';
+            const folderList = document.createElement('ul');
+            folderList.id = 'folder-list';
+            
+            folders.forEach(folder => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `#${folder}`;
+                a.textContent = folder;
+                a.onclick = () => loadChapter(folder);
+                li.appendChild(a);
+                folderList.appendChild(li);
+            });
+
+            contentContainer.appendChild(folderList);
+        }
+
+        async function loadChapter(chapterName) {
+            const contentContainer = document.getElementById('content-container');
+            contentContainer.innerHTML = '';
+
+            const backLink = document.createElement('a');
+            backLink.href = '#';
+            backLink.textContent = '← Back to Chapters';
+            backLink.className = 'back-link';
+            backLink.onclick = (e) => {
+                e.preventDefault();
+                fetchFolders();
+            };
+            contentContainer.appendChild(backLink);
+
+            const audioPlayer = document.createElement('audio');
+            audioPlayer.id = 'audio-player';
+            audioPlayer.controls = true;
+            audioPlayer.src = `${chapterName}/${chapterName}.wav`;
+            contentContainer.appendChild(audioPlayer);
+
+            audioPlayer.onerror = () => {
+                const noAudio = document.createElement('p');
+                noAudio.className = 'no-audio';
+                noAudio.textContent = 'No audio available for this chapter.';
+                contentContainer.replaceChild(noAudio, audioPlayer);
+            };
+
+            const notesContainer = document.createElement('div');
+            notesContainer.id = 'notes-container';
+            contentContainer.appendChild(notesContainer);
+
+            try {
+                const response = await fetch(`${chapterName}/${chapterName}.txt`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notes');
+                }
+                const markdown = await response.text();
+                notesContainer.innerHTML = marked.parse(markdown);
+            } catch (error) {
+                console.error('Error:', error);
+                notesContainer.innerHTML = '<p>Error loading notes. Please make sure the chapter text file exists and is accessible.</p>';
+            }
+        }
+
+        // Check if a specific chapter is requested in the URL
+        const hash = window.location.hash.substring(1);
+        if (hash) {
+            loadChapter(hash);
+        } else {
+            fetchFolders();
+        }
+    </script>
+</body>
+</html>

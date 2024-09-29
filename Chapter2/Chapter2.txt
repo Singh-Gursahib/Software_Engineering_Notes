@@ -1,0 +1,120 @@
+# Threads and Concurrency
+=====================================
+
+## Overview
+--------
+
+### What is a Thread?
+
+A thread is a fundamental unit of CPU utilization that forms the basis of multithreaded computer systems. It is the smallest unit of execution that can be managed by the operating system.
+
+### Characteristics of a Thread
+
+*   A thread ID
+*   A program counter
+*   A register set
+*   A stack
+*   Shares code section, data section, OS resources such as files and signals with other threads belonging to the same process.
+
+### Multithreading
+
+A single process can have multiple threads, and each thread can handle one task at a time.
+
+## Single and Multithreaded Processes
+--------------------------------------
+
+[Google search for Process Diagram](https://www.google.com/search?q=process+diagram)
+
+A single-threaded process has one thread of execution, while a multithreaded process has multiple threads of execution.
+
+## Benefits of Multithreading
+---------------------------
+
+*   **Responsiveness**: Multithreading allows continued execution of other threads if one thread is blocked, making it especially important for user interfaces.
+*   **Resource Sharing**: Threads share resources of the process, making it easier than shared memory or message passing.
+*   **Economy**: Thread creation is cheaper than process creation, and thread switching has lower overhead than context switching.
+*   **Scalability**: A process can take advantage of multiprocessor architectures with multithreading.
+
+## User Threads and Kernel Threads
+----------------------------------
+
+*   **User Threads**: Management is done by a user-level threads library.
+*   **Kernel Threads**: Supported by the kernel.
+
+### Thread Libraries
+
+*   POSIX Pthreads
+*   Windows threads
+*   Java threads
+
+### Examples of Operating Systems
+
+*   Windows
+*   Solaris
+*   Linux
+*   Tru64 UNIX
+*   Mac OS X
+
+## Multithreading Models
+------------------------
+
+*   **Many-to-One**: Many user-level threads are mapped to a single kernel thread.
+*   **One-to-One**: Each user-level thread maps to a kernel thread.
+*   **Many-to-Many**: Many user-level threads are mapped to many kernel threads.
+
+## Many-to-One Model
+--------------------
+
+*   One thread blocking causes all threads to block.
+*   Multiple threads may not run in parallel on multicore systems because only one can be in the kernel at a time.
+
+## One-to-One Model
+------------------
+
+*   Each user-level thread maps to a kernel thread.
+*   Creating a user-level thread creates a kernel thread.
+*   More concurrency than many-to-one, but the number of threads per process may be restricted due to overhead.
+
+## Many-to-Many Model
+--------------------
+
+*   Allows many user-level threads to be mapped to many kernel threads.
+*   Allows the operating system to create a sufficient number of kernel threads.
+
+## Threading Issues
+-------------------
+
+*   **Semantics of fork() and exec() system calls**: The behavior of fork() and exec() is different in multithreaded programs.
+
+### Semantics of fork() and exec()
+
+*   **fork()**: Duplicates a process or creates a child process with a different process ID.
+*   **exec()**: Replaces the contents of a process with the contents of another process but with the same process ID.
+
+### Issue
+
+*   Does fork() duplicate only the calling thread or all threads?
+
+### Solution
+
+*   Some UNIXes have two versions of fork: one that duplicates all threads and one that duplicates only the thread that invoked the system call.
+
+## Thread Cancellation
+----------------------
+
+*   **Terminating a thread before it has finished**: The thread to be cancelled is called the target thread.
+*   **Two general approaches**:
+    *   **Asynchronous cancellation**: Terminates the target thread immediately.
+    *   **Deferred cancellation**: Allows the target thread to periodically check if it should be cancelled.
+
+### How hard is it to cancel and how is it done?
+
+*   In situations where resources are allocated to the target thread or the target thread is sharing data with other threads.
+
+## Quiz
+----
+
+*   What are the multithreading models discussed in this class?
+*   What is the system call used to duplicate a process with the same process ID?
+*   exec() system call replaces the contents of a process and creates another one with the same ID - True or False?
+*   The thread to be cancelled is known as ...?
