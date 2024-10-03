@@ -1,111 +1,1796 @@
-# This is midterm
+# Software Processes
 
-## Overview
---------
+**Topics covered:**
 
-### What is a Thread?
+- Software process models
+- Process activities
+- Coping with change
+- Process improvement
 
-A thread is a fundamental unit of CPU utilization that forms the basis of multithreaded computer systems. It is the smallest unit of execution that can be managed by the operating system.
+**The software process:**
 
-### Characteristics of a Thread
+- A structured set of activities required to develop a software system.
+- Many different software processes, but all involve:
+    - **Specification**: defining what the system should do
+    - **Design and implementation**: defining the organization of the system and implementing the system
+    - **Validation**: checking that it does what the customer wants
+    - **Evolution**: changing the system in response to changing customer needs
+- A software process model is an abstract representation of a process, presenting a description of a process from some particular perspective
 
-*   A thread ID
-*   A program counter
-*   A register set
-*   A stack
-*   Shares code section, data section, OS resources such as files and signals with other threads belonging to the same process.
+**Software process descriptions:**
 
-### Multithreading
+- When describing and discussing processes, we usually talk about the activities in these processes, such as specifying a data model, designing a user interface, etc., and the ordering of these activities.
+- Process descriptions may also include:
+    - **Products**: the outcomes of a process activity
+    - **Roles**: the responsibilities of the people involved in the process
+    - **Pre- and post-conditions**: statements that are true before and after a process activity has been enacted or a product produced
 
-A single process can have multiple threads, and each thread can handle one task at a time.
+**Plan-driven and agile processes:**
 
-## Single and Multithreaded Processes
---------------------------------------
+- **Plan-driven processes** are processes where all of the process activities are planned in advance and progress is measured against this plan.
+- **Agile processes** are processes where planning is incremental and it is easier to change the process to reflect changing customer requirements.
+- In practice, most practical processes include elements of both plan-driven and agile approaches.
+- There are no right or wrong software processes.
 
-[Google search for Process Diagram](https://www.google.com/search?q=process+diagram)
+# Software Process Models
 
-A single-threaded process has one thread of execution, while a multithreaded process has multiple threads of execution.
+## The waterfall model
 
-## Benefits of Multithreading
----------------------------
+- Plan-driven model with separate and distinct phases of specification and development.
 
-*   **Responsiveness**: Multithreading allows continued execution of other threads if one thread is blocked, making it especially important for user interfaces.
-*   **Resource Sharing**: Threads share resources of the process, making it easier than shared memory or message passing.
-*   **Economy**: Thread creation is cheaper than process creation, and thread switching has lower overhead than context switching.
-*   **Scalability**: A process can take advantage of multiprocessor architectures with multithreading.
+## Incremental development
 
-## User Threads and Kernel Threads
-----------------------------------
+- Specification, development, and validation are interleaved. May be plan-driven or agile.
 
-*   **User Threads**: Management is done by a user-level threads library.
-*   **Kernel Threads**: Supported by the kernel.
+## Integration and configuration
 
-### Thread Libraries
+- The system is assembled from existing configurable components. May be plan-driven or agile.
 
-*   POSIX Pthreads
-*   Windows threads
-*   Java threads
+In practice, most large systems are developed using a process that incorporates elements from all of these models.
 
-### Examples of Operating Systems
+### The Waterfall Model Phases
 
-*   Windows
-*   Solaris
-*   Linux
-*   Tru64 UNIX
-*   Mac OS X
+- There are separate identified phases in the waterfall model:
+    - Requirements analysis and definition
+    - System and software design
+    - Implementation and unit testing
+    - Integration and system testing
+    - Operation and maintenance
 
-## Multithreading Models
-------------------------
+### Main drawback of the waterfall model
 
-*   **Many-to-One**: Many user-level threads are mapped to a single kernel thread.
-*   **One-to-One**: Each user-level thread maps to a kernel thread.
-*   **Many-to-Many**: Many user-level threads are mapped to many kernel threads.
+- The difficulty of accommodating change after the process is underway. In principle, a phase has to be complete before moving onto the next phase.
 
-## Many-to-One Model
---------------------
+### Waterfall Model Problems
 
-*   One thread blocking causes all threads to block.
-*   Multiple threads may not run in parallel on multicore systems because only one can be in the kernel at a time.
+- Inflexible partitioning of the project into distinct stages makes it difficult to respond to changing customer requirements.
+- Therefore, this model is only appropriate when the requirements are well-understood and changes will be fairly limited during the design process.
+- Few business systems have stable requirements.
 
-## One-to-One Model
-------------------
+### The Waterfall Model
 
-*   Each user-level thread maps to a kernel thread.
-*   Creating a user-level thread creates a kernel thread.
-*   More concurrency than many-to-one, but the number of threads per process may be restricted due to overhead.
+- Mostly used for large systems engineering projects where a system is developed at several sites.
+- In those circumstances, the plan-driven nature of the waterfall model helps coordinate the work.
 
-## Many-to-Many Model
---------------------
+## Incremental development
 
-*   Allows many user-level threads to be mapped to many kernel threads.
-*   Allows the operating system to create a sufficient number of kernel threads.
+The cost of accommodating changing customer requirements is reduced.
 
-## Threading Issues
--------------------
+- The amount of analysis and documentation that has to be redone is much less than is required with the waterfall model.
 
-*   **Semantics of fork() and exec() system calls**: The behavior of fork() and exec() is different in multithreaded programs.
+It is easier to get customer feedback on the development work that has been done.
 
-### Semantics of fork() and exec()
+- Customers can comment on demonstrations of the software and see how much has been implemented.
 
-*   **fork()**: Duplicates a process or creates a child process with a different process ID.
-*   **exec()**: Replaces the contents of a process with the contents of another process but with the same process ID.
+More rapid delivery and deployment of useful software to the customer is possible.
 
-### Issue
+- Customers are able to use and gain value from the software earlier than is possible with a waterfall process.
 
-*   Does fork() duplicate only the calling thread or all threads?
+## Incremental development problems
 
-### Solution
+- The process is not visible.
+    - Managers need regular deliverables to measure progress. If systems are developed quickly, it is not cost-effective to produce documents that reflect every version of the system.
+- System structure tends to degrade as new increments are added.
+    - Unless time and money is spent on refactoring to improve the software, regular change tends to corrupt its structure. Incorporating further software changes becomes increasingly difficult and costly.
 
-*   Some UNIXes have two versions of fork: one that duplicates all threads and one that duplicates only the thread that invoked the system call.
+## Integration and configuration
 
-## Thread Cancellation
-----------------------
+Based on software reuse where systems are integrated from existing components or application systems (sometimes called COTS - Commercial-off-the-shelf systems).
 
-*   **Terminating a thread before it has finished**: The thread to be cancelled is called the target thread.
-*   **Two general approaches**:
-    *   **Asynchronous cancellation**: Terminates the target thread immediately.
-    *   **Deferred cancellation**: Allows the target thread to periodically check if it should be cancelled.
+Reuse is now the standard approach for building many types of business system.
 
-### How hard is it to cancel and how is it done?
+- Reuse covered in more depth in Chapter 15.
 
-*   In situations where resources are allocated to the target thread or the target thread is sharing data with other threads.
+### Types of reusable software
+
+- **Stand-alone application systems** (sometimes called COTS) that are configured for use in a particular environment.
+- **Collections of objects** that are developed as a package to be integrated with a component framework such as .NET or J2EE.
+- **Web services** that are developed according to service standards and which are available for remote invocation.
+
+# Reuse-oriented software engineering
+
+**Key process stages**
+
+- Requirements specification
+- Software discovery and evaluation
+- Requirements refinement
+- Application system configuration
+- Component adaptation and integration
+
+**Advantages and disadvantages**
+
+- Reduced costs and risks as less software is developed from scratch
+- Faster delivery and deployment of system
+- But requirements compromises are inevitable so system may not meet real needs of users
+- Loss of control over evolution of reused system elements
+
+**Process activities**
+
+- Real software processes are inter-leaved sequences of technical, collaborative and managerial activities with the overall goal of specifying, designing, implementing and testing a software system.
+- The four basic process activities of specification, development, validation and evolution are organized differently in different development processes.
+    - For example, in the waterfall model, they are organized in sequence, whereas in incremental development they are interleaved.
+
+# The Requirements Engineering Process
+
+**Software specification:**
+
+The process of establishing what services are required and the constraints on the system's operation and development.
+
+**Requirements engineering process:**
+
+- **Requirements elicitation and analysis:**
+    - What do the system stakeholders require or expect from the system?
+- **Requirements specification:**
+    - Defining the requirements in detail
+- **Requirements validation:**
+    - Checking the validity of the requirements
+
+# Software Design and Implementation
+
+The process of converting the system specification into an executable system.
+
+**Software design:**
+
+- Design a software structure that realises the specification
+
+**Implementation:**
+
+- Translate this structure into an executable program
+
+The activities of design and implementation are closely related and may be inter-leaved.
+
+# A General Model of the Design Process
+
+**Design activities:**
+
+- **Architectural design:**
+    - Identify the overall structure of the system, the principal components (subsystems or modules), their relationships and how they are distributed
+- **Database design:**
+    - Design the system data structures and how these are to be represented in a database
+- **Interface design:**
+    - Define the interfaces between system components
+- **Component selection and design:**
+    - Search for reusable components. If unavailable, design how it will operate
+
+### System Implementation
+
+The software is implemented either by developing a program or programs or by configuring an application system.
+
+Design and implementation are interleaved activities for most types of software system.
+
+Programming is an individual activity with no standard process.
+
+Debugging is the activity of finding program faults and correcting these faults.
+
+### Software Validation
+
+Verification and validation (V & V) is intended to show that a system conforms to its specification and meets the requirements of the system customer.
+
+Involves checking and review processes and system testing.
+
+System testing involves executing the system with test cases that are derived from the specification of the real data to be processed by the system.
+
+Testing is the most commonly used V & V activity.
+
+### Stages of Testing
+
+### Component Testing
+
+- Individual components are tested independently.
+- Components may be functions or objects or coherent groupings of these entities.
+
+### System Testing
+
+- Testing of the system as a whole. Testing of emergent properties is particularly important.
+
+### Customer Testing
+
+- Testing with customer data to check that the system meets the customer’s needs.
+
+# Software Evolution
+
+Software is inherently flexible and can change. As requirements change through changing business circumstances, the software that supports the business must also evolve and change. Although there has been a demarcation between development and evolution (maintenance) this is increasingly irrelevant as fewer and fewer systems are completely new.
+
+## Coping with change
+
+Change is inevitable in all large software projects. Business changes lead to new and changed system requirements. New technologies open up new possibilities for improving implementations. Changing platforms require application changes. Change leads to rework so the costs of change include both rework (e.g. re-analysing requirements) as well as the costs of implementing new functionality.
+
+**Reducing the costs of rework**
+
+- **Change anticipation**, where the software process includes activities that can anticipate possible changes before significant rework is required. For example, a prototype system may be developed to show some key features of the system to customers.
+- **Change tolerance**, where the process is designed so that changes can be accommodated at relatively low cost. This normally involves some form of incremental development. Proposed changes may be implemented in increments that have not yet been developed. If this is impossible, then only a single increment (a small part of the system) may have to be altered to incorporate the change.
+
+### Coping with changing requirements
+
+**System prototyping**, where a version of the system or part of the system is developed quickly to check the customer's requirements and the feasibility of design decisions. This approach supports change anticipation.
+
+**Incremental delivery**, where system increments are delivered to the customer for comment and experimentation. This supports both change avoidance and change tolerance.
+
+# Software Prototyping
+
+A prototype is an initial version of a system used to demonstrate concepts and try out design options.
+
+A prototype can be used in:
+
+- The requirements engineering process to help with requirements elicitation and validation;
+- In design processes to explore options and develop a UI design;
+- In the testing process to run back-to-back tests.
+
+**Benefits of Prototyping**
+
+- Improved system usability.
+- A closer match to users' real needs.
+- Improved design quality.
+- Improved maintainability.
+- Reduced development effort.
+
+**Throw away prototypes**
+
+Prototypes should be discarded after development as they are not a good basis for a production system:
+
+- It may be impossible to tune the system to meet non-functional requirements;
+- Prototypes are normally undocumented;
+- The prototype structure is usually degraded through rapid change;
+- The prototype probably will not meet normal organisational quality standards.
+
+**Incremental delivery**
+
+Rather than deliver the system as a single delivery, the development and delivery is broken down into increments with each increment delivering part of the required functionality.
+
+- User requirements are prioritised and the highest priority requirements are included in early increments.
+- Once the development of an increment is started, the requirements are frozen though requirements for later increments can continue to evolve.
+
+**Incremental development and delivery**
+
+- **Incremental development**
+    - Develop the system in increments and evaluate each increment before proceeding to the development of the next increment;
+    - Normal approach used in agile methods;
+    - Evaluation done by user/customer proxy.
+- **Incremental delivery**
+    - Deploy an increment for use by end-users;
+    - More realistic evaluation about practical use of software;
+    - Difficult to implement for replacement systems as increments have less functionality than the system being replaced.
+
+**Incremental delivery advantages**
+
+- Customer value can be delivered with each increment so system functionality is available earlier.
+- Early increments act as a prototype to help elicit requirements for later increments.
+- Lower risk of overall project failure.
+- The highest priority system services tend to receive the most testing.
+
+**Incremental delivery problems**
+
+- Most systems require a set of basic facilities that are used by different parts of the system.
+- As requirements are not defined in detail until an increment is to be implemented, it can be hard to identify common facilities that are needed by all increments.
+- The essence of iterative processes is that the specification is developed in conjunction with the software.
+    - However, this conflicts with the procurement model of many organizations, where the complete system specification is part of the system development contract.
+
+# Process Improvement
+
+Many software companies have turned to software process improvement as a way of enhancing the quality of their software, reducing costs or accelerating their development processes.
+
+Process improvement means understanding existing processes and changing these processes to increase product quality and/or reduce costs and development time.
+
+**Approaches to improvement**
+
+- The **process maturity approach**, which focuses on improving process and project management and introducing good software engineering practice.
+    - The level of process maturity reflects the extent to which good technical and management practice has been adopted in organizational software development processes.
+- The **agile approach**, which focuses on iterative development and the reduction of overheads in the software process.
+    - The primary characteristics of agile methods are rapid delivery of functionality and responsiveness to changing customer requirements.
+
+**Process improvement activities**
+
+### Process Measurement
+
+- You measure one or more attributes of the software process or product. These measurements form a baseline that helps you decide if process improvements have been effective.
+
+### Process Analysis
+
+- The current process is assessed, and process weaknesses and bottlenecks are identified. Process models (sometimes called process maps) that describe the process may be developed.
+
+### Process Change
+
+- Process changes are proposed to address some of the identified process weaknesses. These are introduced, and the cycle resumes to collect data about the effectiveness of the changes.
+
+# Process Measurement
+
+- Whenever possible, quantitative process data should be collected.
+    - However, where organisations do not have clearly defined process standards, this is very difficult as you don't know what to measure. A process may have to be defined before any measurement is possible.
+- Process measurements should be used to assess process improvements.
+    - But this does not mean that measurements should drive the improvements. The improvement driver should be the organizational objectives.
+
+# Process Metrics
+
+### Time Taken for Process Activities
+
+- E.g., calendar time or effort to complete an activity or process.
+
+### Resources Required for Processes or Activities
+
+- E.g., total effort in person-days.
+
+### Number of Occurrences of a Particular Event
+
+- E.g., number of defects discovered.
+
+# Capability Maturity Levels
+
+### The SEI Capability Maturity Model
+
+- **Initial**: Essentially uncontrolled
+- **Repeatable**: Product management procedures defined and used
+- **Defined**: Process management procedures and strategies defined and used
+- **Managed**: Quality management strategies defined and used
+- **Optimising**: Process improvement strategies defined and used
+
+# Software Processes
+
+**Key points**
+
+- Software processes are the activities involved in producing a software system.
+- Software process models are abstract representations of these processes.
+- General process models describe the organization of software processes.
+    - Examples of general models include the ‘waterfall’ model, incremental development, and reuse-oriented development.
+- Requirements engineering is the process of developing a software specification.
+
+**Design and Implementation Processes**
+
+- Design and implementation processes are concerned with transforming a requirements specification into an executable software system.
+- Software validation is the process of checking that the system conforms to its specification and that it meets the real needs of the users of the system.
+- Software evolution takes place when you change existing software systems to meet new requirements. The software must evolve to remain useful.
+    - Processes should include activities such as prototyping and incremental delivery to cope with change.
+
+**Process Improvement**
+
+- Processes may be structured for iterative development and delivery so that changes may be made without disrupting the system as a whole.
+- The principal approaches to process improvement are agile approaches, geared to reducing process overheads, and maturity-based approaches based on better process management and the use of good software engineering practice.
+- The SEI process maturity framework identifies maturity levels that essentially correspond to the use of good software engineering practice.
+
+---
+
+# Agile Software Development
+
+## Topics Covered
+
+- Agile methods
+- Agile development techniques
+- Agile project management
+- Scaling agile methods
+
+## Rapid Software Development
+
+Rapid development and delivery is now often the most important requirement for software systems. Businesses operate in a fast-changing environment, and it is practically impossible to produce a set of stable software requirements. Software has to evolve quickly to reflect changing business needs. Plan-driven development is essential for some types of systems but does not meet these business needs. Agile development methods emerged in the late 1990s, aiming to radically reduce the delivery time for working software systems.
+
+## Agile Development
+
+Program specification, design, and implementation are interleaved. The system is developed as a series of versions or increments with stakeholders involved in version specification and evaluation. Frequent delivery of new versions for evaluation is crucial. Extensive tool support (e.g., automated testing tools) is used to support development. Minimal documentation—focus on working code.
+
+# Plan-Driven and Agile Development
+
+## Plan-Driven Development
+
+A plan-driven approach to software engineering is based around separate development stages with the outputs to be produced at each of these stages planned in advance. Not necessarily a waterfall model—plan-driven, incremental development is possible. Iteration occurs within activities.
+
+## Agile Development
+
+Specification, design, implementation, and testing are interleaved, and the outputs from the development process are decided through a process of negotiation during the software development process.
+
+## Agile Methods
+
+Dissatisfaction with the overheads involved in software design methods of the 1980s and 1990s led to the creation of agile methods. These methods:
+
+- Focus on the code rather than the design
+- Are based on an iterative approach to software development
+- Are intended to deliver working software quickly and evolve this quickly to meet changing requirements
+
+The aim of agile methods is to reduce overheads in the software process (e.g., by limiting documentation) and to be able to respond quickly to changing requirements without excessive rework.
+
+## Agile Manifesto
+
+> We are uncovering better ways of developing software by doing it and helping others do it. Through this work we have come to value:
+> 
+> - Individuals and interactions over processes and tools
+> - Working software over comprehensive documentation
+> - Customer collaboration over contract negotiation
+> - Responding to change over following a plan
+> 
+> That is, while there is value in the items on the right, we value the items on the left more.
+> 
+
+## Principles of Agile Methods
+
+### Customer Involvement
+
+Customers should be closely involved throughout the development process. Their role is to provide and prioritize new system requirements and to evaluate the iterations of the system.
+
+### Incremental Delivery
+
+The software is developed in increments with the customer specifying the requirements to be included in each increment.
+
+### People Not Process
+
+The skills of the development team should be recognized and exploited. Team members should be left to develop their own ways of working without prescriptive processes.
+
+### Embrace Change
+
+Expect the system requirements to change and design the system to accommodate these changes.
+
+### Maintain Simplicity
+
+Focus on simplicity in both the software being developed and in the development process. Wherever possible, actively work to eliminate complexity from the system.
+
+## Agile Method Applicability
+
+- **Product development** where a software company is developing a small or medium-sized product for sale.
+    - Virtually all software products and apps are now developed using an agile approach.
+- **Custom system development** within an organization, where there is a clear commitment from the customer to become involved in the development process and where there are few external rules and regulations that affect the software.
+
+---
+
+# Agile Development Techniques
+
+## Extreme Programming
+
+A very influential agile method, developed in the late 1990s, that introduced a range of agile development techniques. Extreme Programming (XP) takes an 'extreme' approach to iterative development.
+
+- New versions may be built several times per day
+- Increments are delivered to customers every 2 weeks
+- All tests must be run for every build, and the build is only accepted if tests run successfully
+
+### Extreme Programming Practices
+
+| Principle or Practice | Description |
+| --- | --- |
+| **Incremental planning** | Requirements are recorded on story cards, and the stories to be included in a release are determined by the time available and their relative priority. The developers break these stories into development 'Tasks'. See Figures 3.5 and 3.6. |
+| **Small releases** | The minimal useful set of functionality that provides business value is developed first. Releases of the system are frequent and incrementally add functionality to the first release. |
+| **Simple design** | Enough design is carried out to meet the current requirements and no more. |
+| **Test-first development** | An automated unit test framework is used to write tests for a new piece of functionality before that functionality itself is implemented. |
+| **Refactoring** | All developers are expected to refactor the code continuously as soon as possible code improvements are found. This keeps the code simple and maintainable. |
+- **Pair Programming**: Developers work in pairs, checking each other's work and providing the support to always do a good job.
+- **Collective Ownership**: The pairs of developers work on all areas of the system so that no islands of expertise develop, and all the developers take responsibility for all of the code. Anyone can change anything.
+- **Continuous Integration**: As soon as the work on a task is complete, it is integrated into the whole system. After any such integration, all the unit tests in the system must pass.
+- **Sustainable Pace**: Large amounts of overtime are not considered acceptable as the net effect is often to reduce code quality and medium-term productivity.
+- **On-Site Customer**: A representative of the end-user of the system (the customer) should be available full-time for the use of the XP team. In an extreme programming process, the customer is a member of the development team and is responsible for bringing system requirements to the team for implementation.
+
+### XP and Agile Principles
+
+- **Incremental development** is supported through small, frequent system releases.
+- **Customer involvement** means full-time customer engagement with the team.
+- **People not process** through pair programming, collective ownership, and a process that avoids long working hours.
+- **Change** supported through regular system releases.
+- **Maintaining simplicity** through constant refactoring of code.
+
+### Influential XP Practices
+
+- Extreme programming has a technical focus and is not easy to integrate with management practice in most organizations.
+- **Key practices:**
+    - User stories for specification
+    - Refactoring
+    - Test-first development
+    - Pair programming
+
+## User Stories for Requirements
+
+- In XP, a customer or user is part of the XP team and is responsible for making decisions on requirements.
+- User requirements are expressed as user stories or scenarios.
+- These are written on cards, and the development team breaks them down into implementation tasks. These tasks are the basis of schedule and cost estimates.
+- The customer chooses the stories for inclusion in the next release based on their priorities and the schedule estimates.
+
+# Examples of Task Cards for Prescribing Medication
+
+Examples of task cards for prescribing medication
+
+---
+
+## Refactoring
+
+Conventional wisdom in software engineering is to design for change. It is worth spending time and effort anticipating changes as this reduces costs later in the life cycle. XP, however, maintains that this is not worthwhile as changes cannot be reliably anticipated. Rather, it proposes constant code improvement (refactoring) to make changes easier when they have to be implemented.
+
+Programming teams look for possible software improvements and make these improvements even where there is no immediate need for them. This improves the understandability of the software and reduces the need for documentation. Changes are easier to make because the code is well-structured and clear. However, some changes require architecture refactoring, which is much more expensive.
+
+### Examples of Refactoring
+
+- Re-organization of a class hierarchy to remove duplicate code.
+- Tidying up and renaming attributes and methods to make them easier to understand.
+- The replacement of inline code with calls to methods that have been included in a program library.
+
+## Test-First Development
+
+Testing is central to XP, and XP has developed an approach where the program is tested after every change has been made. XP testing features:
+
+- Test-first development
+- Incremental test development from scenarios
+- User involvement in test development and validation
+- Automated test harnesses are used to run all component tests each time that a new release is built
+
+### Test-Driven Development
+
+Writing tests before code clarifies the requirements to be implemented. Tests are written as programs rather than data so that they can be executed automatically. The test includes a check that it has executed correctly. Usually relies on a testing framework such as JUnit. All previous and new tests are run automatically when new functionality is added, thus checking that the new functionality has not introduced errors.
+
+### Customer Involvement
+
+The role of the customer in the testing process is to help develop acceptance tests for the stories that are to be implemented in the next release of the system. The customer who is part of the team writes tests as development proceeds. All new code is therefore validated to ensure that it is what the customer needs. However, people adopting the customer role have limited time available and so cannot work full-time with the development team. They may feel that providing the requirements was enough of a contribution and so may be reluctant to get involved in the testing process.
+
+### Test Automation
+
+Test automation means that tests are written as executable components before the task is implemented. These testing components should be stand-alone, should simulate the submission of input to be tested, and should check that the result meets the output specification. An automated test framework (e.g., JUnit) is a system that makes it easy to write executable tests and submit a set of tests for execution. As testing is automated, there is always a set of tests that can be quickly and easily executed. Whenever any functionality is added to the system, the tests can be run, and problems that the new code has introduced can be caught immediately.
+
+### Problems with Test-First Development
+
+- Programmers prefer programming to testing and sometimes take shortcuts when writing tests. For example, they may write incomplete tests that do not check for all possible exceptions that may occur.
+- Some tests can be very difficult to write incrementally. For example, in a complex user interface, it is often difficult to write unit tests for the code that implements the ‘display logic’ and workflow between screens.
+- It is difficult to judge the completeness of a set of tests. Although you may have a lot of system tests, your test set may not provide complete coverage.
+
+## Pair Programming
+
+Pair programming involves programmers working in pairs, developing code together. This helps develop common ownership of code and spreads knowledge across the team. It serves as an informal review process as each line of code is looked at by more than one person. It encourages refactoring as the whole team can benefit from improving the system code.
+
+In pair programming, programmers sit together at the same computer to develop the software. Pairs are created dynamically so that all team members work with each other during the development process. The sharing of knowledge that happens during pair programming is very important as it reduces the overall risks to a project when team members leave. Pair programming is not necessarily inefficient, and there is some evidence that suggests that a pair working together is more efficient than two programmers working separately.
+
+---
+
+# Agile Project Management
+
+The principal responsibility of software project managers is to manage the project so that the software is delivered on time and within the planned budget for the project. The standard approach to project management is plan-driven. Managers draw up a plan for the project showing what should be delivered, when it should be delivered, and who will work on the development of the project deliverables. Agile project management requires a different approach, which is adapted to incremental development and the practices used in agile methods.
+
+## Scrum
+
+Scrum is an agile method that focuses on managing iterative development rather than specific agile practices. There are three phases in Scrum.
+
+- The **initial phase** is an outline planning phase where you establish the general objectives for the project and design the software architecture.
+- This is followed by a series of **sprint cycles**, where each cycle develops an increment of the system.
+- The **project closure phase** wraps up the project, completes required documentation such as system help frames and user manuals, and assesses the lessons learned from the project.
+
+### Scrum Terminology
+
+- **Development Team**: A self-organizing group of software developers, which should be no more than 7 people. They are responsible for developing the software and other essential project documents.
+- **Potentially Shippable Product Increment**: The software increment delivered from a sprint. The idea is that this should be "potentially shippable," which means that it is in a finished state and no further work, such as testing, is needed to incorporate it into the final product.
+- **Product Backlog**: A list of "to do" items which the Scrum team must tackle. They may be feature definitions for the software, software requirements, user stories, or descriptions of supplementary tasks that are needed, such as architecture definition or user documentation.
+- **Product Owner**: An individual (or possibly a small group) whose job is to identify product features or requirements, prioritize these for development, and continuously review the product backlog to ensure that the project continues to meet critical business needs.
+- **Scrum**: A daily meeting of the Scrum team that reviews progress and prioritizes work to be done that day. Ideally, this should be a short face-to-face meeting that includes the whole team.
+- **ScrumMaster**: The ScrumMaster is responsible for ensuring that the Scrum process is followed and guides the team in the effective use of Scrum. He or she is responsible for interfacing with the rest of the company and for ensuring that the Scrum team is not diverted by outside interference.
+- **Sprint**: A development iteration. Sprints are usually 2–4 weeks long.
+- **Velocity**: An estimate of how much product backlog effort a team can cover in a single sprint. Understanding a team’s velocity helps them estimate what can be covered in a sprint and provides a basis for measuring improving performance.
+
+### Scrum Sprint Cycle
+
+- Sprints are fixed length, normally 2–4 weeks.
+- The starting point for planning is the product backlog, which is the list of work to be done on the project.
+- The selection phase involves all of the project team, who work with the customer to select the features and functionality from the product backlog to be developed during the sprint.
+- Once these are agreed, the team organizes themselves to develop the software.
+- During this stage, the team is isolated from the customer and the organization, with all communications channeled through the so-called "ScrumMaster."
+- The role of the ScrumMaster is to protect the development team from external distractions.
+- At the end of the sprint, the work done is reviewed and presented to stakeholders. The next sprint cycle then begins.
+
+### Teamwork in Scrum
+
+The **ScrumMaster** is a facilitator who arranges daily meetings, tracks the backlog of work to be done, records decisions, measures progress against the backlog, and communicates with customers and management outside of the team.
+
+- The whole team attends short daily meetings (**Scrum**) where all team members share information, describe their progress since the last meeting, problems that have arisen, and what is planned for the following day.
+- This means that everyone on the team knows what is going on and, if problems arise, can re-plan short-term work to cope with them.
+
+### Scrum Benefits
+
+- The product is broken down into a set of manageable and understandable chunks.
+- Unstable requirements do not hold up progress.
+- The whole team has visibility of everything, and consequently, team communication is improved.
+- Customers see on-time delivery of increments and gain feedback on how the product works.
+- Trust between customers and developers is established, and a positive culture is created in which everyone expects the project to succeed.
+
+---
+
+## Scaling Agile Methods
+
+Agile methods have proved to be successful for small and medium-sized projects that can be developed by a small co-located team.
+
+It is sometimes argued that the success of these methods comes because of improved communications, which is possible when everyone is working together.
+
+Scaling up agile methods involves changing these to cope with larger, longer projects where there are multiple development teams, perhaps working in different locations.
+
+### Scaling Out and Scaling Up
+
+- **Scaling up** is concerned with using agile methods for developing large software systems that cannot be developed by a small team.
+- **Scaling out** is concerned with how agile methods can be introduced across a large organization with many years of software development experience.
+
+When scaling agile methods, it is important to maintain agile fundamentals:
+
+- Flexible planning, frequent system releases, continuous integration, test-driven development, and good team communications.
+
+### Practical Problems with Agile Methods
+
+- The informality of agile development is incompatible with the legal approach to contract definition that is commonly used in large companies.
+- Agile methods are most appropriate for new software development rather than software maintenance. Yet the majority of software costs in large companies come from maintaining their existing software systems.
+- Agile methods are designed for small co-located teams, yet much software development now involves worldwide distributed teams.
+
+### Contractual Issues
+
+- Most software contracts for custom systems are based around a specification, which sets out what has to be implemented by the system developer for the system customer.
+- However, this precludes interleaving specification and development as is the norm in agile development.
+- A contract that pays for developer time rather than functionality is required.
+    - However, this is seen as a high risk by many legal departments because what has to be delivered cannot be guaranteed.
+
+### Agile Methods and Software Maintenance
+
+Most organizations spend more on maintaining existing software than they do on new software development. So, if agile methods are to be successful, they have to support maintenance as well as original development.
+
+Two key issues:
+
+- Are systems that are developed using an agile approach maintainable, given the emphasis in the development process of minimizing formal documentation?
+- Can agile methods be used effectively for evolving a system in response to customer change requests?
+
+Problems may arise if the original development team cannot be maintained.
+
+### Agile Maintenance
+
+Key problems are:
+
+- Lack of product documentation
+- Keeping customers involved in the development process
+- Maintaining the continuity of the development team
+
+Agile development relies on the development team knowing and understanding what has to be done.
+
+For long-lifetime systems, this is a real problem as the original developers will not always work on the system.
+
+### Agile and Plan-Driven Methods
+
+Most projects include elements of plan-driven and agile processes. Deciding on the balance depends on:
+
+- Whether it is important to have a very detailed specification and design before moving to implementation? If so, you probably need to use a plan-driven approach.
+- Whether an incremental delivery strategy, where you deliver the software to customers and get rapid feedback from them, is realistic? If so, consider using agile methods.
+- How large is the system that is being developed? Agile methods are most effective when the system can be developed with a small co-located team who can communicate informally. This may not be possible for large systems that require larger development teams, so a plan-driven approach may have to be used.
+
+### Agile Principles and Organizational Practice
+
+| Principle | Practice |
+| --- | --- |
+| **Customer involvement** | This depends on having a customer who is willing and able to spend time with the development team and who can represent all system stakeholders. Often, customer representatives have other demands on their time and cannot play a full part in the software development.Where there are external stakeholders, such as regulators, it is difficult to represent their views to the agile team. |
+| **Embrace change** | Prioritizing changes can be extremely difficult, especially in systems for which there are many stakeholders. Typically, each stakeholder gives different priorities to different changes. |
+| **Incremental delivery** | Rapid iterations and short-term planning for development does not always fit in with the longer-term planning cycles of business planning and marketing. Marketing managers may need to know what product features several months in advance to prepare an effective marketing campaign. |
+| **Maintain simplicity** | Under pressure from delivery schedules, team members may not have time to carry out desirable system simplifications. |
+| **People not process** | Individual team members may not have suitable personalities for the intense involvement that is typical of agile methods and therefore may not interact well with other team members. |
+
+### Agile and Plan-Based Factors
+
+- **How large is the system being developed?**
+    
+    Agile methods are most effective when the system can be developed with a small co-located team who can communicate informally.
+    
+- **What type of system is being developed?**
+    
+    Systems that require a lot of analysis before implementation need a fairly detailed design to carry out this analysis.
+    
+- **What is the expected system lifetime?**
+    
+    Long-lifetime systems require documentation to communicate the intentions of the system developers to the support team.
+    
+- **Is the system subject to external regulation?**
+    
+    If a system is regulated, you will probably be required to produce detailed documentation as part of the system safety case.
+    
+
+### People and Teams
+
+- **How good are the designers and programmers in the development team?**
+    
+    It is sometimes argued that agile methods require higher skill levels than plan-based approaches in which programmers simply translate a detailed design into code.
+    
+- **How is the development team organized?**
+    
+    Design documents may be required if the team is distributed.
+    
+- **What support technologies are available?**
+    
+    IDE support for visualization and program analysis is essential if design documentation is not available.
+    
+
+### Organizational Issues
+
+- Traditional engineering organizations have a culture of plan-based development, as this is the norm in engineering.
+- Is it standard organizational practice to develop a detailed system specification?
+- Will customer representatives be available to provide feedback on system increments?
+- Can informal agile development fit into the organizational culture of detailed documentation?
+
+---
+
+## Agile Methods for Large Systems
+
+- Large systems are usually collections of separate, communicating systems, where separate teams develop each system. Frequently, these teams are working in different places, sometimes in different time zones.
+- Large systems are **brownfield systems**, that is, they include and interact with a number of existing systems. Many of the system requirements are concerned with this interaction and so don't really lend themselves to flexibility and incremental development.
+- Where several systems are integrated to create a system, a significant fraction of the development is concerned with system configuration rather than original code development.
+
+### Large System Development
+
+- Large systems and their development processes are often constrained by external rules and regulations limiting the way that they can be developed.
+- Large systems have a long procurement and development time. It is difficult to maintain coherent teams who know about the system over that period as, inevitably, people move on to other jobs and projects.
+- Large systems usually have a diverse set of stakeholders. It is practically impossible to involve all of these different stakeholders in the development process.
+
+---
+
+**Scaling Up Agile Software Development**
+
+- A completely incremental approach to requirements engineering is impossible.
+- There cannot be a single product owner or customer representative.
+- For large systems development, it is not possible to focus only on the code of the system.
+- Cross-team communication mechanisms have to be designed and used.
+- Continuous integration is practically impossible. However, it is essential to maintain frequent system builds and regular releases of the system.
+
+**Multi-Team Scrum**
+
+- **Role Replication**: Each team has a Product Owner for their work component and ScrumMaster.
+- **Product Architects**: Each team chooses a product architect, and these architects collaborate to design and evolve the overall system architecture.
+- **Release Alignment**: The dates of product releases from each team are aligned so that a demonstrable and complete system is produced.
+- **Scrum of Scrums**: There is a daily Scrum of Scrums where representatives from each team meet to discuss progress and plan work to be done.
+
+**Agile Methods Across Organizations**
+
+- Project managers who do not have experience of agile methods may be reluctant to accept the risk of a new approach.
+- Large organizations often have quality procedures and standards that all projects are expected to follow, and because of their bureaucratic nature, these are likely to be incompatible with agile methods.
+- Agile methods seem to work best when team members have a relatively high skill level. However, within large organizations, there are likely to be a wide range of skills and abilities.
+- There may be cultural resistance to agile methods, especially in those organizations that have a long history of using conventional systems engineering processes.
+
+---
+
+**Key Points**
+
+- Agile methods are incremental development methods that focus on rapid software development, frequent releases of the software, reducing process overheads by minimizing documentation, and producing high-quality code.
+- Agile development practices include:
+    - User stories for system specification
+    - Frequent releases of the software
+    - Continuous software improvement
+    - Test-first development
+    - Customer participation in the development team
+
+**Key Points**
+
+- Scrum is an agile method that provides a project management framework.
+- It is centered around a set of sprints, which are fixed time periods when a system increment is developed.
+- Many practical development methods are a mixture of plan-based and agile development.
+- Scaling agile methods for large systems is difficult.
+- Large systems need upfront design and some documentation, and organizational practice may conflict with the informality of agile approaches.
+
+---
+
+# Software Testing
+
+## Topics Covered
+
+- Development testing
+- Test-driven development
+- Release testing
+- User testing
+
+## Program Testing
+
+Testing is intended to show that a program does what it is intended to do and to discover program defects before it is put into use. When you test software, you execute a program using artificial data. You check the results of the test run for errors, anomalies, or information about the program’s non-functional attributes.
+
+**Can reveal the presence of errors, NOT their absence.**
+
+Testing is part of a more general verification and validation process, which also includes static validation techniques.
+
+## Program Testing Goals
+
+- **To demonstrate to the developer and the customer that the software meets its requirements.**
+    - For custom software, this means that there should be at least one test for every requirement in the requirements document.
+    - For generic software products, it means that there should be tests for all of the system features, plus combinations of these features, that will be incorporated in the product release.
+- **To discover situations in which the behavior of the software is incorrect, undesirable, or does not conform to its specification.**
+    - Defect testing is concerned with rooting out undesirable system behavior such as system crashes, unwanted interactions with other systems, incorrect computations, and data corruption.
+
+## Validation and Defect Testing
+
+- **The first goal leads to validation testing.**
+    - You expect the system to perform correctly using a given set of test cases that reflect the system’s expected use.
+- **The second goal leads to defect testing.**
+    - The test cases are designed to expose defects. The test cases in defect testing can be deliberately obscure and need not reflect how the system is normally used.
+
+## Testing Process Goals
+
+### Validation Testing
+
+- To demonstrate to the developer and system customer that the software meets its requirements.
+- A successful test shows that the system operates as intended.
+
+### Defect Testing
+
+- To discover faults or defects in the software where its behavior is incorrect or not in conformance with its specification.
+- A successful test is a test that makes the system perform incorrectly and so exposes a defect in the system.
+
+### Verification vs Validation
+
+- **Verification**: "Are we building the product right?"
+    - The software should conform to its specification.
+- **Validation**: "Are we building the right product?"
+    - The software should do what the user really requires.
+
+### V & V Confidence
+
+- Aim of V & V is to establish confidence that the system is 'fit for purpose'.
+- Depends on system's purpose, user expectations, and marketing environment:
+    - Software purpose
+    - User expectations
+    - Marketing environment
+
+### Inspections and Testing
+
+- **Software inspections**
+    - Concerned with analysis of the static system representation to discover problems (static verification).
+    - May be supplemented by tool-based document and code analysis. Discussed in Chapter 15.
+- **Software testing**
+    - Concerned with exercising and observing product behavior (dynamic verification).
+    - The system is executed with test data and its operational behavior is observed.
+
+## Software Inspections
+
+These involve people examining the source representation with the aim of discovering anomalies and defects. Inspections do not require execution of a system so may be used before implementation. They may be applied to any representation of the system (requirements, design, configuration data, test data, etc.). They have been shown to be an effective technique for discovering program errors.
+
+### Advantages of Inspections
+
+During testing, errors can mask (hide) other errors. Because inspection is a static process, you don't have to be concerned with interactions between errors. Incomplete versions of a system can be inspected without additional costs. If a program is incomplete, then you need to develop specialized test harnesses to test the parts that are available.
+
+As well as searching for program defects, an inspection can also consider broader quality attributes of a program, such as compliance with standards, portability, and maintainability.
+
+## Inspections and Testing
+
+Inspections and testing are complementary and not opposing verification techniques. Both should be used during the V & V process. Inspections can check conformance with a specification but not conformance with the customer's real requirements. Inspections cannot check non-functional characteristics such as performance, usability, etc.
+
+## A Model of the Software Testing Process
+
+## Stages of Testing
+
+### Development Testing
+
+Development testing includes all testing activities that are carried out by the team developing the system. This includes:
+
+- **Unit testing**, where individual program units or object classes are tested. Unit testing should focus on testing the functionality of objects or methods.
+- **Component testing**, where several individual units are integrated to create composite components. Component testing should focus on testing component interfaces.
+- **System testing**, where some or all of the components in a system are integrated and the system is tested as a whole. System testing should focus on testing component interactions.
+
+### Unit Testing
+
+Unit testing is the process of testing individual components in isolation. It is a defect testing process. Units may be:
+
+- Individual functions or methods within an object
+- Object classes with several attributes and methods
+- Composite components with defined interfaces used to access their functionality
+
+## Weather Station Testing
+
+Need to define test cases for `reportWeather`, `calibrate`, `test`, `startup`, and `shutdown`.
+
+Using a state model, identify sequences of state transitions to be tested and the event sequences to cause these transitions.
+
+For example:
+
+- `Shutdown` ➔ `Running` ➔ `Shutdown`
+- `Configuring` ➔ `Running` ➔ `Testing` ➔ `Transmitting` ➔ `Running`
+- `Running` ➔ `Collecting` ➔ `Running` ➔ `Summarizing` ➔ `Transmitting` ➔ `Running`
+
+## Automated Testing
+
+Whenever possible, unit testing should be automated so that tests are run and checked without manual intervention.
+
+In automated unit testing, you make use of a test automation framework (such as JUnit) to write and run your program tests.
+
+Unit testing frameworks provide generic test classes that you extend to create specific test cases. They can then run all of the tests that you have implemented and report, often through some GUI, on the success or otherwise of the tests.
+
+## Automated Test Components
+
+- **A setup part**, where you initialize the system with the test case, namely the inputs and expected outputs.
+- **A call part**, where you call the object or method to be tested.
+- **An assertion part**, where you compare the result of the call with the expected result. If the assertion evaluates to true, the test has been successful; if false, then it has failed.
+
+## Choosing Unit Test Cases
+
+The test cases should show that, when used as expected, the component that you are testing does what it is supposed to do.
+
+If there are defects in the component, these should be revealed by test cases.
+
+This leads to two types of unit test case:
+
+- The first of these should reflect normal operation of a program and should show that the component works as expected.
+- The other kind of test case should be based on testing experience of where common problems arise. It should use abnormal inputs to check that these are properly processed and do not crash the component.
+
+### Testing Strategies
+
+- **Partition testing**, where you identify groups of inputs that have common characteristics and should be processed in the same way. You should choose tests from within each of these groups.
+- **Guideline-based testing**, where you use testing guidelines to choose test cases. These guidelines reflect previous experience of the kinds of errors that programmers often make when developing components.
+
+### Partition Testing
+
+Input data and output results often fall into different classes where all members of a class are related. Each of these classes is an equivalence partition or domain where the program behaves in an equivalent way for each class member. Test cases should be chosen from each partition.
+
+### Equivalence Partitioning
+
+[Content not provided.]
+
+### Equivalence Partitions
+
+[Content not provided.]
+
+### Testing Guidelines (Sequences)
+
+- Test software with sequences which have only a single value.
+- Use sequences of different sizes in different tests.
+- Derive tests so that the first, middle, and last elements of the sequence are accessed.
+- Test with sequences of zero length.
+
+### General Testing Guidelines
+
+- Choose inputs that force the system to generate all error messages.
+- Design inputs that cause input buffers to overflow.
+- Repeat the same input or series of inputs numerous times.
+- Force invalid outputs to be generated.
+- Force computation results to be too large or too small.
+
+## Component Testing
+
+Software components are often composite components that are made up of several interacting objects.
+
+For example, in the weather station system, the reconfiguration component includes objects that deal with each aspect of the reconfiguration.
+
+You access the functionality of these objects through the defined component interface.
+
+Testing composite components should therefore focus on showing that the component interface behaves according to its specification.
+
+You can assume that unit tests on the individual objects within the component have been completed.
+
+### Interface Testing
+
+Objectives are to detect faults due to interface errors or invalid assumptions about interfaces.
+
+**Interface types:**
+
+- **Parameter interfaces**: Data passed from one method or procedure to another.
+- **Shared memory interfaces**: Block of memory is shared between procedures or functions.
+- **Procedural interfaces**: Sub-system encapsulates a set of procedures to be called by other sub-systems.
+- **Message passing interfaces**: Sub-systems request services from other sub-systems.
+
+### Interface Errors
+
+- **Interface misuse**: A calling component calls another component and makes an error in its use of its interface (e.g., parameters in the wrong order).
+- **Interface misunderstanding**: A calling component embeds assumptions about the behavior of the called component which are incorrect.
+- **Timing errors**: The called and the calling component operate at different speeds and out-of-date information is accessed.
+
+## Interface Testing Guidelines
+
+- Design tests so that parameters to a called procedure are at the extreme ends of their ranges.
+- Always test pointer parameters with null pointers.
+- Design tests which cause the component to fail.
+- Use stress testing in message passing systems.
+- In shared memory systems, vary the order in which components are activated.
+
+## System Testing
+
+- System testing during development involves integrating components to create a version of the system and then testing the integrated system.
+- The focus in system testing is testing the interactions between components.
+- System testing checks that components are compatible, interact correctly and transfer the right data at the right time across their interfaces.
+- System testing tests the emergent behavior of a system.
+
+## System and Component Testing
+
+- During system testing, reusable components that have been separately developed and off-the-shelf systems may be integrated with newly developed components. The complete system is then tested.
+- Components developed by different team members or sub-teams may be integrated at this stage. System testing is a collective rather than an individual process.
+- In some companies, system testing may involve a separate testing team with no involvement from designers and programmers.
+
+## Use-Case Testing
+
+- The use-cases developed to identify system interactions can be used as a basis for system testing.
+- Each use-case usually involves several system components so testing the use-case forces these interactions to occur.
+- The sequence diagrams associated with the use-case documents the components and interactions that are being tested.
+
+### Test Cases Derived from Sequence Diagram
+
+An input of a request for a report should have an associated acknowledgement. A report should ultimately be returned from the request.
+
+You should create summarized data that can be used to check that the report is correctly organized.
+
+An input request for a report to `WeatherStation` results in a summarized report being generated.
+
+Can be tested by creating raw data corresponding to the summary that you have prepared for the test of `SatComms` and checking that the `WeatherStation` object correctly produces this summary. This raw data is also used to test the `WeatherData` object.
+
+### Testing Policies
+
+Exhaustive system testing is impossible, so testing policies which define the required system test coverage may be developed.
+
+Examples of testing policies:
+
+- All system functions that are accessed through menus should be tested.
+- Combinations of functions (e.g., text formatting) that are accessed through the same menu must be tested.
+- Where user input is provided, all functions must be tested with both correct and incorrect input.
+
+## Test-Driven Development
+
+Tests are written before code and 'passing' the tests is the critical driver of development.
+
+You develop code incrementally, along with a test for that increment. You don't move on to the next increment until the code that you have developed passes its test.
+
+TDD was introduced as part of agile methods such as Extreme Programming. However, it can also be used in plan-driven development processes.
+
+### TDD Process Activities
+
+- Start by identifying the increment of functionality that is required. This should normally be small and implementable in a few lines of code.
+- Write a test for this functionality and implement this as an automated test.
+- Run the test, along with all other tests that have been implemented. Initially, you have not implemented the functionality so the new test will fail.
+- Implement the functionality and re-run the test.
+- Once all tests run successfully, you move on to implementing the next chunk of functionality.
+
+### Benefits of Test-Driven Development
+
+- **Code coverage**: Every code segment that you write has at least one associated test so all code written has at least one test.
+- **Regression testing**: A regression test suite is developed incrementally as a program is developed.
+- **Simplified debugging**: When a test fails, it should be obvious where the problem lies. The newly written code needs to be checked and modified.
+- **System documentation**: The tests themselves are a form of documentation that describe what the code should be doing.
+
+### Regression Testing
+
+- Regression testing is testing the system to check that changes have not ‘broken’ previously working code.
+- In a manual testing process, regression testing is expensive but, with automated testing, it is simple and straightforward. All tests are rerun every time a change is made to the program.
+- Tests must run ‘successfully’ before the change is committed.
+
+## Release Testing
+
+- Release testing is the process of testing a particular release of a system that is intended for use outside of the development team.
+- The primary goal of the release testing process is to convince the supplier of the system that it is good enough for use.
+    - Release testing, therefore, has to show that the system delivers its specified functionality, performance, and dependability, and that it does not fail during normal use.
+- Release testing is usually a black-box testing process where tests are only derived from the system specification.
+
+### Release Testing and System Testing
+
+Release testing is a form of system testing. Important differences:
+
+- A separate team that has not been involved in the system development should be responsible for release testing.
+- System testing by the development team should focus on discovering bugs in the system (defect testing). The objective of release testing is to check that the system meets its requirements and is good enough for external use (validation testing).
+
+### Requirements-Based Testing
+
+Requirements-based testing involves examining each requirement and developing a test or tests for it.
+
+**Mentcare System Requirements:**
+
+- If a patient is known to be allergic to any particular medication, then prescription of that medication shall result in a warning message being issued to the system user.
+- If a prescriber chooses to ignore an allergy warning, they shall provide a reason why this has been ignored.
+
+### Requirements Tests
+
+1. Set up a patient record with no known allergies. Prescribe medication for allergies that are known to exist. Check that a warning message is not issued by the system.
+2. Set up a patient record with a known allergy. Prescribe the medication that the patient is allergic to, and check that the warning is issued by the system.
+3. Set up a patient record in which allergies to two or more drugs are recorded. Prescribe both of these drugs separately and check that the correct warning for each drug is issued.
+4. Prescribe two drugs that the patient is allergic to. Check that two warnings are correctly issued.
+5. Prescribe a drug that issues a warning and overrule that warning. Check that the system requires the user to provide information explaining why the warning was overruled.
+
+### A Usage Scenario for the Mentcare System
+
+George is a nurse who specializes in mental healthcare. One of his responsibilities is to visit patients at home to check that their treatment is effective and that they are not suffering from medication side effects.
+
+### Features Tested by Scenario
+
+- Authentication by logging on to the system.
+- Downloading and uploading of specified patient records to a laptop.
+- Home visit scheduling.
+- Encryption and decryption of patient records on a mobile device.
+- Record retrieval and modification.
+- Links with the drugs database that maintains side-effect information.
+- The system for call prompting.
+
+### Performance Testing
+
+Part of release testing may involve testing the emergent properties of a system, such as performance and reliability. Tests should reflect the profile of use of the system. Performance tests usually involve planning a series of tests where the load is steadily increased until the system performance becomes unacceptable. Stress testing is a form of performance testing where the system is deliberately overloaded to test its failure behaviour.
+
+## User Testing
+
+User or customer testing is a stage in the testing process in which users or customers provide input and advice on system testing. User testing is essential, even when comprehensive system and release testing have been carried out. The reason for this is that influences from the user's working environment have a major effect on the reliability, performance, usability, and robustness of a system. These cannot be replicated in a testing environment.
+
+### Types of User Testing
+
+- **Alpha Testing**
+    
+    Users of the software work with the development team to test the software at the developer's site.
+    
+- **Beta Testing**
+    
+    A release of the software is made available to users to allow them to experiment and to raise problems that they discover with the system developers.
+    
+- **Acceptance Testing**
+    
+    Customers test a system to decide whether or not it is ready to be accepted from the system developers and deployed in the customer environment. Primarily for custom systems.
+    
+
+### Here Are the Stages in the Acceptance Testing Process
+
+- Define acceptance criteria
+- Plan acceptance testing
+- Derive acceptance tests
+- Run acceptance tests
+- Negotiate test results
+- Reject/accept system
+
+### Agile Methods and Acceptance Testing
+
+- In agile methods, the user/customer is part of the development team and is responsible for making decisions on the acceptability of the system.
+- Tests are defined by the user/customer and are integrated with other tests in that they are run automatically when changes are made.
+- There is no separate acceptance testing process.
+- Main problem here is whether or not the embedded user is 'typical' and can represent the interests of all system stakeholders.
+
+## Key Points
+
+- Testing can only show the presence of errors in a program. It cannot demonstrate that there are no remaining faults.
+- Development testing is the responsibility of the software development team. A separate team should be responsible for testing a system before it is released to customers.
+- Development testing includes unit testing, in which you test individual objects and methods, component testing, in which you test related groups of objects, and system testing, in which you test partial or complete systems.
+
+**Key points:**
+
+- When testing software, you should try to 'break' the software by using experience and guidelines to choose types of test case that have been effective in discovering defects in other systems.
+- Wherever possible, you should write automated tests. The tests are embedded in a program that can be run every time a change is made to a system.
+- Test-first development is an approach to development where tests are written before the code to be tested.
+- Scenario testing involves inventing a typical usage scenario and using this to derive test cases.
+- Acceptance testing is a user testing process where the aim is to decide if the software is good enough to be deployed and used in its operational environment.
+
+---
+
+# Software Evolution
+
+## Topics Covered
+
+- Evolution processes
+- Legacy systems
+- Software maintenance
+
+## Software Change
+
+- Software change is inevitable
+    - New requirements emerge when the software is used;
+    - The business environment changes;
+    - Errors must be repaired;
+    - New computers and equipment is added to the system;
+    - The performance or reliability of the system may have to be improved.
+- A key problem for all organizations is implementing and managing change to their existing software systems.
+
+## Importance of Evolution
+
+- Organisations have huge investments in their software systems—they are critical business assets.
+- To maintain the value of these assets to the business, they must be changed and updated.
+- The majority of the software budget in large companies is devoted to changing and evolving existing software rather than developing new software.
+
+## A Spiral Model of Development and Evolution
+
+# Evolution and Servicing
+
+Evolution is the stage in a software system's life cycle where it is in operational use and is evolving as new requirements are proposed and implemented in the system.
+
+### Servicing
+
+At this stage, the software remains useful but the only changes made are those required to keep it operational, i.e., bug fixes and changes to reflect changes in the software's environment. No new functionality is added.
+
+### Phase-out
+
+The software may still be used but no further changes are made to it.
+
+# Evolution Processes
+
+Software evolution processes depend on:
+
+- The type of software being maintained
+- The development processes used
+- The skills and experience of the people involved
+
+Proposals for change are the driver for system evolution. They should be linked with components that are affected by the change, thus allowing the cost and impact of the change to be estimated.
+
+Change identification and evolution continues throughout the system lifetime.
+
+# Change Implementation
+
+Change implementation is the iteration of the development process where revisions to the system are designed, implemented, and tested. A critical difference is that the first stage of change implementation may involve program understanding, especially if the original system developers are not responsible for the change implementation.
+
+During the program understanding phase, you have to understand how the program is structured, how it delivers functionality, and how the proposed change might affect the program.
+
+# Urgent Change Requests
+
+Urgent changes may have to be implemented without going through all stages of the software engineering process.
+
+- If a serious system fault has to be repaired to allow normal operation to continue;
+- If changes to the system's environment (e.g., an OS upgrade) have unexpected effects;
+- If there are business changes that require a very rapid response (e.g., the release of a competing product).
+
+# Agile Methods and Evolution
+
+Agile methods are based on incremental development, so the transition from development to evolution is a seamless one. Evolution is simply a continuation of the development process based on frequent system releases.
+
+Automated regression testing is particularly valuable when changes are made to a system. Changes may be expressed as additional user stories.
+
+# Handover Problems
+
+- Where the development team have used an agile approach but the evolution team is unfamiliar with agile methods and prefer a plan-based approach. The evolution team may expect detailed documentation to support evolution, and this is not produced in agile processes.
+- Where a plan-based approach has been used for development but the evolution team prefer to use agile methods. The evolution team may have to start from scratch developing automated tests, and the code in the system may not have been refactored and simplified as is expected in agile development.
+
+# Legacy Systems
+
+Legacy systems are older systems that rely on languages and technology that are no longer used for new systems development. Legacy software may be dependent on older hardware, such as mainframe computers, and may have associated legacy processes and procedures.
+
+Legacy systems are not just software systems but are broader socio-technical systems that include hardware, software, libraries, and other supporting software and business processes.
+
+# Legacy System Components
+
+- **System hardware**: Written for hardware that is no longer available
+- **Support software**: Range of support software that may be obsolete or unsupported
+- **Application software**: Made up of a number of application programs
+- **Application data**: Data processed by the application system, may be inconsistent, duplicated, or held in different databases
+
+# Legacy System Components
+
+- **Business processes**: Processes used in the business to achieve some business objective
+    - Business processes may be designed around a legacy system and constrained by the functionality that it provides
+- **Business policies and rules**: Definitions of how the business should be carried out and constraints on the business; use of the legacy application system may be embedded in these policies and rules
+
+# Legacy System Layers
+
+# Legacy System Replacement
+
+- Legacy system replacement is risky and expensive, so businesses continue to use these systems.
+- System replacement is risky for a number of reasons:
+    - Lack of complete system specification
+    - Tight integration of system and business processes
+    - Undocumented business rules embedded in the legacy system
+    - New software development may be late and/or over budget
+
+# Legacy System Change
+
+- Legacy systems are expensive to change for a number of reasons:
+    - No consistent programming style
+    - Use of obsolete programming languages with few people available with these language skills
+    - Inadequate system documentation
+    - System structure degradation
+    - Program optimizations may make them hard to understand
+    - Data errors, duplication, and inconsistency
+
+**Legacy system management**
+
+Organisations that rely on legacy systems must choose a strategy for evolving these systems:
+
+- Scrap the system completely and modify business processes so that it is no longer required;
+- Continue maintaining the system;
+- Transform the system by re-engineering to improve its maintainability;
+- Replace the system with a new system.
+
+The strategy chosen should depend on the system quality and its business value.
+
+**Legacy system categories**
+
+- **Low quality, low business value**: These systems should be scrapped.
+- **Low-quality, high-business value**: These make an important business contribution but are expensive to maintain. Should be re-engineered or replaced if a suitable system is available.
+- **High-quality, low-business value**: Replace with COTS, scrap completely, or maintain.
+- **High-quality, high business value**: Continue in operation using normal system maintenance.
+
+**Business value assessment**
+
+Assessment should take different viewpoints into account:
+
+- System end-users;
+- Business customers;
+- Line managers;
+- IT managers;
+- Senior managers.
+
+Interview different stakeholders and collate results.
+
+**Issues in business value assessment**
+
+- **The use of the system**: If systems are only used occasionally or by a small number of people, they may have a low business value.
+- **The business processes that are supported**: A system may have a low business value if it forces the use of inefficient business processes.
+- **System dependability**: If a system is not dependable and the problems directly affect business customers, the system has a low business value.
+- **The system outputs**: If the business depends on system outputs, then the system has a high business value.
+
+### System Quality Assessment
+
+### Business Process Assessment
+
+- How well does the business process support the current goals of the business?
+- Use a viewpoint-oriented approach and seek answers from system stakeholders:
+    - Is there a defined process model and is it followed?
+    - Do different parts of the organisation use different processes for the same function?
+    - How has the process been adapted?
+    - What are the relationships with other business processes and are these necessary?
+    - Is the process effectively supported by the legacy application software?
+
+### Example
+
+- A travel ordering system may have a low business value because of the widespread use of web-based ordering.
+
+### Environment Assessment
+
+Factors:
+
+- **Supplier stability**: Is the supplier still in existence? Is the supplier financially stable and likely to continue in existence? If the supplier is no longer in business, does someone else maintain the systems?
+- **Failure rate**: Does the hardware have a high rate of reported failures? Does the support software crash and force system restarts?
+- **Age**: How old is the hardware and software? The older the hardware and support software, the more obsolete it will be. It may still function correctly but there could be significant economic and business benefits to moving to a more modern system.
+- **Performance**: Is the performance of the system adequate? Do performance problems have a significant effect on system users?
+
+### Factors Used in Environment Assessment
+
+- **Support requirements**: What local support is required by the hardware and software? If there are high costs associated with this support, it may be worth considering system replacement.
+- **Maintenance costs**: What are the costs of hardware maintenance and support software licences? Older hardware may have higher maintenance costs than modern systems. Support software may have high annual licensing costs.
+- **Interoperability**: Are there problems interfacing the system to other systems? Can compilers, for example, be used with current versions of the operating system? Is hardware emulation required?
+
+### Application Assessment
+
+Factors:
+
+- **Understandability**: How difficult is it to understand the source code of the current system? How complex are the control structures that are used? Do variables have meaningful names that reflect their function?
+- **Documentation**: What system documentation is available? Is the documentation complete, consistent, and current?
+- **Data**: Is there an explicit data model for the system? To what extent is data duplicated across files? Is the data used by the system up to date and consistent?
+- **Performance**: Is the performance of the application adequate? Do performance problems have a significant effect on system users?
+
+### Factors Used in Application Assessment
+
+| **Factor** | **Questions** |
+| --- | --- |
+| **Programming Language** | Are modern compilers available for the programming language used to develop the system?Is the programming language still used for new system development? |
+| **Configuration Management** | Are all versions of all parts of the system managed by a configuration management system?Is there an explicit description of the versions of components that are used in the current system? |
+| **Test Data** | Does test data for the system exist?Is there a record of regression tests carried out when new features have been added to the system? |
+| **Personnel Skills** | Are there people available who have the skills to maintain the application?Are there people available who have experience with the system? |
+
+### System Measurement
+
+- Collect quantitative data to make an assessment of the quality of the application system.
+- **Quality factors**:
+    - The number of system change requests; the higher this accumulated value, the lower the quality of the system.
+    - The number of different user interfaces used by the system; the more interfaces, the more likely it is that there will be inconsistencies and redundancies in these interfaces.
+    - The volume of data used by the system; as the volume of data (number of files, size of database, etc.) processed by the system increases, so too do the inconsistencies and errors in that data.
+    - Cleaning up old data is a very expensive and time-consuming process.
+
+## Maintenance Effort Distribution
+
+Maintenance effort distribution is affected by both technical and non-technical factors.
+
+### Maintenance Costs
+
+- Usually greater than development costs (2× to 100× depending on the application).
+- Increases as software is maintained.
+- Maintenance corrupts the software structure, making further maintenance more difficult.
+
+### Ageing Software
+
+- Ageing software can have high support costs (e.g., old languages, compilers, etc.).
+
+### Maintenance and New Features
+
+- It is usually more expensive to add new features to a system during maintenance than it is to add the same features during development.
+
+### Challenges in Maintenance
+
+- A new team has to understand the programs being maintained.
+- Separating maintenance and development means there is no incentive for the development team to write maintainable software.
+- Program maintenance work is unpopular.
+- Maintenance staff are often inexperienced and have limited domain knowledge.
+- As programs age, their structure degrades and they become harder to change.
+
+## Maintenance Prediction
+
+Maintenance prediction is concerned with assessing which parts of the system may cause problems and have high maintenance costs.
+
+### Factors Affecting Maintenance Costs
+
+- Change acceptance depends on the maintainability of the components affected by the change.
+- Implementing changes degrades the system and reduces its maintainability.
+- Maintenance costs depend on the number of changes, and costs of change depend on maintainability.
+
+Predicting the number of changes requires understanding relationships between a system and its environment. Tightly coupled systems require changes whenever the environment is changed. Factors influencing this relationship include:
+
+- Number and complexity of system interfaces;
+- Number of inherently volatile system requirements;
+- The business processes where the system is used.
+
+Predictions of maintainability can be made by assessing the complexity of system components. Studies have shown that most maintenance effort is spent on a relatively small number of system components. Complexity depends on:
+
+- Complexity of control structures;
+- Complexity of data structures;
+- Object, method (procedure), and module size.
+
+Process metrics may be used to assess maintainability:
+
+- Number of requests for corrective maintenance;
+- Average time required for impact analysis;
+- Average time taken to implement a change request;
+- Number of outstanding change requests.
+
+If any or all of these is increasing, this may indicate a decline in maintainability.
+
+Software reengineering involves restructuring or rewriting part or all of a legacy system without changing its functionality. It is applicable where some but not all sub-systems of a larger system require frequent maintenance. Reengineering involves adding effort to make them easier to maintain. The system may be restructured and re-documented.
+
+Advantages of reengineering include:
+
+- **Reduced risk**: There is a high risk in new software development. There may be development problems, staffing problems, and specification problems.
+- **Reduced cost**: The cost of re-engineering is often significantly less than the costs of developing new software.
+
+# Reengineering Process
+
+**Reengineering process activities**
+
+- **Source code translation**
+    - Convert code to a new language.
+- **Reverse engineering**
+    - Analyze the program to understand it.
+- **Program structure improvement**
+    - Restructure automatically for understandability.
+- **Program modularization**
+    - Reorganize the program structure.
+- **Data reengineering**
+    - Clean up and restructure system data.
+
+# Reengineering Approaches
+
+# Reengineering Cost Factors
+
+- The quality of the software to be reengineered.
+- The tool support available for reengineering.
+- The extent of the data conversion which is required.
+- The availability of expert staff for reengineering.
+    - This can be a problem with old systems based on technology that is no longer widely used.
+
+# Refactoring
+
+Refactoring is the process of making improvements to a program to slow down degradation through change.
+
+You can think of refactoring as ‘preventative maintenance’ that reduces the problems of future change.
+
+Refactoring involves modifying a program to improve its structure, reduce its complexity, or make it easier to understand.
+
+When you refactor a program, you should not add functionality but rather concentrate on program improvement.
+
+# Refactoring and Reengineering
+
+- **Re-engineering** takes place after a system has been maintained for some time and maintenance costs are increasing. You use automated tools to process and re-engineer a legacy system to create a new system that is more maintainable.
+- **Refactoring** is a continuous process of improvement throughout the development and evolution process. It is intended to avoid the structure and code degradation that increases the costs and difficulties of maintaining a system.
+
+# 'Bad Smells' in Program Code
+
+### Duplicate Code
+
+- The same or very similar code may be included at different places in a program. This can be removed and implemented as a single method or function that is called as required.
+
+### Long Methods
+
+- If a method is too long, it should be redesigned as a number of shorter methods.
+
+### Switch (case) Statements
+
+- These often involve duplication, where the switch depends on the type of a value. The switch statements may be scattered around a program. In object-oriented languages, you can often use polymorphism to achieve the same thing.
+
+# 'Bad Smells' in Program Code
+
+### Data Clumping
+
+- Data clumps occur when the same group of data items (fields in classes, parameters in methods) reoccur in several places in a program. These can often be replaced with an object that encapsulates all of the data.
+
+### Speculative Generality
+
+- This occurs when developers include generality in a program in case it is required in the future. This can often simply be removed.
+
+# Key Points
+
+- Software development and evolution can be thought of as an integrated, iterative process that can be represented using a spiral model.
+- For custom systems, the costs of software maintenance usually exceed the software development costs.
+- The process of software evolution is driven by requests for changes and includes change impact analysis, release planning, and change implementation.
+- Legacy systems are older software systems, developed using obsolete software and hardware technologies, that remain useful for a business.
+- It is often cheaper and less risky to maintain a legacy system than to develop a replacement system using modern technology.
+- The business value of a legacy system and the quality of the application should be assessed to help decide if a system should be replaced, transformed, or maintained.
+- There are 3 types of software maintenance, namely bug fixing, modifying software to work in a new environment, and implementing new or changed requirements.
+
+**Software re-engineering** is concerned with re-structuring and re-documenting software to make it easier to understand and change.
+
+**Refactoring**, making program changes that preserve functionality, is a form of preventative maintenance.
+
+---
+
+# Dependable Systems
+
+## Topics Covered
+
+- Dependability properties
+- Sociotechnical systems
+- Redundancy and diversity
+- Dependable processes
+- Formal methods and dependability
+
+## System Dependability
+
+The dependability of a system reflects the user's degree of trust in that system. It reflects the extent of the user's confidence that it will operate as users expect and that it will not "fail" in normal use. Dependability covers the related systems attributes of reliability, availability, and security. These are all inter-dependent.
+
+## Importance of Dependability
+
+- **System failures may have widespread effects** with large numbers of people affected by the failure.
+- **Systems that are not dependable and are unreliable, unsafe, or insecure may be rejected by their users.**
+- **The costs of system failure may be very high** if the failure leads to economic losses or physical damage.
+- **Undependable systems may cause information loss** with a high consequent recovery cost.
+
+## Causes of Failure
+
+- **Hardware failure**
+    - Hardware fails because of design and manufacturing errors or because components have reached the end of their natural life.
+- **Software failure**
+    - Software fails due to errors in its specification, design, or implementation.
+- **Operational failure**
+    - Human operators make mistakes. Now perhaps the largest single cause of system failures in socio-technical systems.
+
+# Dependability Properties
+
+The principal dependability properties are:
+
+- **Availability**: The probability that the system will be up and running and able to deliver useful services to users.
+- **Reliability**: The probability that the system will correctly deliver services as expected by users.
+- **Safety**: A judgment of how likely it is that the system will cause damage to people or its environment.
+- **Security**: A judgment of how likely it is that the system can resist accidental or deliberate intrusions.
+- **Resilience**: A judgment of how well a system can maintain the continuity of its critical services in the presence of disruptive events such as equipment failure and cyberattacks.
+
+Additional dependability properties include:
+
+- **Repairability**: Reflects the extent to which the system can be repaired in the event of a failure.
+- **Maintainability**: Reflects the extent to which the system can be adapted to new requirements.
+- **Error tolerance**: Reflects the extent to which user input errors can be avoided and tolerated.
+
+### Dependability Attribute Dependencies
+
+- Safe system operation depends on the system being available and operating reliably.
+- A system may be unreliable because its data has been corrupted by an external attack.
+- Denial of service attacks on a system are intended to make it unavailable.
+- If a system is infected with a virus, you cannot be confident in its reliability or safety.
+
+### Dependability Achievement
+
+- Avoid the introduction of accidental errors when developing the system.
+- Design V & V processes that are effective in discovering residual errors in the system.
+- Design systems to be fault tolerant so that they can continue in operation when faults occur.
+- Design protection mechanisms that guard against external attacks.
+
+### Dependability Achievement (Continued)
+
+- Configure the system correctly for its operating environment.
+- Include system capabilities to recognize and resist cyberattacks.
+- Include recovery mechanisms to help restore normal system service after a failure.
+
+### Dependability Costs
+
+- Dependability costs tend to increase exponentially as increasing levels of dependability are required.
+- There are two reasons for this:
+    - The use of more expensive development techniques and hardware that are required to achieve the higher levels of dependability.
+    - The increased testing and system validation that is required to convince the system client and regulators that the required levels of dependability have been achieved.
+
+Because of very high costs of dependability achievement, it may be more cost effective to accept untrustworthy systems and pay for failure costs. However, this depends on social and political factors. A reputation for products that can’t be trusted may lose future business. Depends on system type—for business systems in particular, modest levels of dependability may be adequate.
+
+Software engineering is not an isolated activity but is part of a broader systems engineering process. Software systems are therefore not isolated systems but are essential components of broader systems that have a human, social, or organizational purpose.
+
+**Example**
+
+The wilderness weather system is part of broader weather recording and forecasting systems. These include hardware and software, forecasting processes, system users, the organizations that depend on weather forecasts, etc.
+
+## Layers in the STS Stack
+
+- **Equipment**
+    - Hardware devices, some of which may be computers. Most devices will include an embedded system of some kind.
+- **Operating System**
+    - Provides a set of common facilities for higher levels in the system.
+- **Communications and Data Management**
+    - Middleware that provides access to remote systems and databases.
+- **Application Systems**
+    - Specific functionality to meet some organization requirements.
+
+### Layers in the STS Stack (Continued)
+
+- **Business Processes**
+    - A set of processes involving people and computer systems that support the activities of the business.
+- **Organizations**
+    - Higher-level strategic business activities that affect the operation of the system.
+- **Society**
+    - Laws, regulation, and culture that affect the operation of the system.
+
+## Holistic System Design
+
+- There are interactions and dependencies between the layers in a system and changes at one level ripple through the other levels.
+    - **Example**: Change in regulations (society) leads to changes in business processes and application software.
+- For dependability, a systems perspective is essential.
+    - Contain software failures within the enclosing layers of the STS stack.
+    - Understand how faults and failures in adjacent layers may affect the software in a system.
+
+## Regulation and Compliance
+
+- The general model of economic organization that is now almost universal in the world is that privately owned companies offer goods and services and make a profit on these.
+- To ensure the safety of their citizens, most governments regulate (limit the freedom of) privately owned companies so that they must follow certain standards to ensure that their products are safe and secure.
+
+## Regulated Systems
+
+- Many critical systems are regulated systems, which means that their use must be approved by an external regulator before the systems go into service
+    - **Examples**: Nuclear systems, air traffic control systems, medical devices.
+- A safety and dependability case has to be approved by the regulator. Therefore, critical systems development has to create the evidence to convince a regulator that the system is dependable, safe, and secure.
+
+## Safety Regulation
+
+- Regulation and compliance (following the rules) applies to the sociotechnical system as a whole and not simply the software element of that system.
+- Safety-related systems may have to be certified as safe by the regulator.
+- To achieve certification, companies that are developing safety-critical systems have to produce an extensive safety case that shows that rules and regulations have been followed.
+- It can be as expensive to develop the documentation for certification as it is to develop the system itself.
+
+# Redundancy and Diversity
+
+**Redundancy**
+
+Keep more than a single version of critical components so that if one fails, a backup is available.
+
+**Diversity**
+
+Provide the same functionality in different ways in different components so that they will not fail in the same way.
+
+Redundant and diverse components should be independent so that they will not suffer from "common-mode" failures. For example, components implemented in different programming languages means that a compiler fault will not affect all of them.
+
+## Diversity and Redundancy Examples
+
+- **Redundancy**
+    - Where availability is critical (e.g., in e-commerce systems), companies normally keep backup servers and switch to these automatically if failure occurs.
+- **Diversity**
+    - To provide resilience against external attacks, different servers may be implemented using different operating systems (e.g., Windows and Linux).
+
+## Process Diversity and Redundancy
+
+Process activities, such as validation, should not depend on a single approach, such as testing, to validate the system.
+
+Redundant and diverse process activities are important, especially for verification and validation. Multiple, different process activities that complement each other and allow for cross-checking help to avoid process errors, which may lead to errors in the software.
+
+## Problems with Redundancy and Diversity
+
+Adding diversity and redundancy to a system increases the system complexity. This can increase the chances of error because of unanticipated interactions and dependencies between the redundant system components.
+
+Some engineers therefore advocate simplicity and extensive V & V as a more effective route to software dependability.
+
+# Dependable Processes
+
+To ensure a minimal number of software faults, it is important to have a well-defined, repeatable software process. A well-defined repeatable process is one that does not depend entirely on individual skills; rather, it can be enacted by different people. Regulators use information about the process to check if good software engineering practice has been used. For fault detection, it is clear that the process activities should include significant effort devoted to verification and validation.
+
+## Dependable Process Characteristics
+
+### Explicitly Defined
+
+A process that has a defined process model that is used to drive the software production process. Data must be collected during the process that proves that the development team has followed the process as defined in the process model.
+
+### Repeatable
+
+A process that does not rely on individual interpretation and judgment. The process can be repeated across projects and with different team members, irrespective of who is involved in the development.
+
+### Auditable
+
+The process should be understandable by people apart from process participants, who can check that process standards are being followed and make suggestions for process improvement.
+
+### Diverse
+
+The process should include redundant and diverse verification and validation activities.
+
+### Documentable
+
+The process should have a defined process model that sets out the activities in the process and the documentation that is to be produced during these activities.
+
+### Robust
+
+The process should be able to recover from failures of individual process activities.
+
+### Standardized
+
+A comprehensive set of software development standards covering software production and documentation should be available.
+
+## Dependable Process Activities
+
+### Requirements Reviews
+
+To check that the requirements are, as far as possible, complete and consistent.
+
+### Requirements Management
+
+To ensure that changes to the requirements are controlled and that the impact of proposed requirements changes is understood.
+
+### Formal Specification
+
+Where a mathematical model of the software is created and analyzed.
+
+### System Modeling
+
+Where the software design is explicitly documented as a set of graphical models, and the links between the requirements and these models are documented.
+
+# Dependable Process Activities (Continued)
+
+- **Design and Program Inspections**, where different descriptions of the system are inspected and checked by different people.
+- **Static Analysis**, where automated checks are carried out on the source code of the program.
+- **Test Planning and Management**, where a comprehensive set of system tests is designed.
+    - The testing process has to be carefully managed to demonstrate that these tests provide coverage of the system requirements and have been correctly applied in the testing process.
+
+# Dependable Processes and Agility
+
+- Dependable software often requires certification so both process and product documentation has to be produced.
+- Up-front requirements analysis is also essential to discover requirements and requirements conflicts that may compromise the safety and security of the system.
+- These conflict with the general approach in agile development of co-development of the requirements and the system and minimizing documentation.
+
+## Dependable Processes and Agility (Continued)
+
+- An agile process may be defined that incorporates techniques such as iterative development, test-first development, and user involvement in the development team.
+    - So long as the team follows that process and documents their actions, agile methods can be used.
+    - However, additional documentation and planning is essential so "pure agile" is impractical for dependable systems engineering.
+
+# Formal Methods and Dependability
+
+## Formal Specification
+
+- Formal methods are approaches to software development that are based on mathematical representation and analysis of software.
+- Formal methods include:
+    - Formal specification;
+    - Specification analysis and proof;
+    - Transformational development;
+    - Program verification.
+- Formal methods significantly reduce some types of programming errors and can be cost-effective for dependable systems engineering.
+
+## Formal Approaches
+
+### Verification-Based Approaches
+
+- Different representations of a software system, such as a specification and a program implementing that specification, are proved to be equivalent.
+- This demonstrates the absence of implementation errors.
+
+### Refinement-Based Approaches
+
+- A representation of a system is systematically transformed into another, lower-level representation, e.g., a specification is transformed automatically into an implementation.
+- This means that, if the transformation is correct, the representations are equivalent.
+
+## Use of Formal Methods
+
+- The principal benefits of formal methods are in reducing the number of faults in systems.
+- Consequently, their main area of applicability is in dependable systems engineering.
+- There have been several successful projects where formal methods have been used in this area.
+- In this area, the use of formal methods is most likely to be cost-effective because high system failure costs must be avoided.
+
+## Classes of Error
+
+- **Specification and Design Errors and Omissions**
+    - Developing and analyzing a formal model of the software may reveal errors and omissions in the software requirements.
+    - If the model is generated automatically or systematically from source code, analysis using model checking can find undesirable states that may occur, such as deadlock in a concurrent system.
+- **Inconsistencies Between a Specification and a Program**
+    - If a refinement method is used, mistakes made by developers that make the software inconsistent with the specification are avoided.
+    - Program proving discovers inconsistencies between a program and its specification.
+
+## Benefits of Formal Specification
+
+- Developing a formal specification requires the system requirements to be analyzed in detail, which helps to detect problems, inconsistencies, and incompleteness in the requirements.
+- As the specification is expressed in a formal language, it can be automatically analyzed to discover inconsistencies and incompleteness.
+- If you use a formal method such as the B method, you can transform the formal specification into a "correct" program.
+- Program testing costs may be reduced if the program is formally verified against its specification.
+
+## Acceptance of Formal Methods
+
+- Formal methods have had limited impact on practical software development:
+    - Problem owners cannot understand a formal specification and so cannot assess if it is an accurate representation of their requirements.
+    - It is easy to assess the costs of developing a formal specification but harder to assess the benefits. Managers may therefore be unwilling to invest in formal methods.
+    - Software engineers are unfamiliar with this approach and are therefore reluctant to propose the use of formal methods.
+    - Formal methods are still hard to scale up to large systems.
+    - Formal specification is not really compatible with agile development methods.
+
+# Key Points
+
+- **System dependability is important because failure of critical systems can lead to economic losses, information loss, physical damage, or threats to human life.**
+- **The dependability of a computer system is a system property that reflects the user's degree of trust in the system. The most important dimensions of dependability are availability, reliability, safety, security, and resilience.**
+- **Sociotechnical systems include computer hardware, software, and people, and are situated within an organization. They are designed to support organizational or business goals and objectives.**
+- **The use of a dependable, repeatable process is essential if faults in a system are to be minimized. The process should include verification and validation activities at all stages, from requirements definition through to system implementation.**
+- **The use of redundancy and diversity in hardware, software processes, and software systems is essential to the development of dependable systems.**
+- **Formal methods, where a formal model of a system is used as a basis for development, help reduce the number of specification and implementation errors in a system.**
