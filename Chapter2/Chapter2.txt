@@ -1,120 +1,370 @@
-# Threads and Concurrency
-=====================================
+# Software Processes
 
-## Overview
---------
+**Topics covered:**
 
-### What is a Thread?
+- Software process models
+- Process activities
+- Coping with change
+- Process improvement
 
-A thread is a fundamental unit of CPU utilization that forms the basis of multithreaded computer systems. It is the smallest unit of execution that can be managed by the operating system.
+**The software process:**
 
-### Characteristics of a Thread
+- A structured set of activities required to develop a software system.
+- Many different software processes, but all involve:
+    - **Specification**: defining what the system should do
+    - **Design and implementation**: defining the organization of the system and implementing the system
+    - **Validation**: checking that it does what the customer wants
+    - **Evolution**: changing the system in response to changing customer needs
+- A software process model is an abstract representation of a process, presenting a description of a process from some particular perspective
 
-*   A thread ID
-*   A program counter
-*   A register set
-*   A stack
-*   Shares code section, data section, OS resources such as files and signals with other threads belonging to the same process.
+**Software process descriptions:**
 
-### Multithreading
+- When describing and discussing processes, we usually talk about the activities in these processes, such as specifying a data model, designing a user interface, etc., and the ordering of these activities.
+- Process descriptions may also include:
+    - **Products**: the outcomes of a process activity
+    - **Roles**: the responsibilities of the people involved in the process
+    - **Pre- and post-conditions**: statements that are true before and after a process activity has been enacted or a product produced
 
-A single process can have multiple threads, and each thread can handle one task at a time.
+**Plan-driven and agile processes:**
 
-## Single and Multithreaded Processes
---------------------------------------
+- **Plan-driven processes** are processes where all of the process activities are planned in advance and progress is measured against this plan.
+- **Agile processes** are processes where planning is incremental and it is easier to change the process to reflect changing customer requirements.
+- In practice, most practical processes include elements of both plan-driven and agile approaches.
+- There are no right or wrong software processes.
 
-[Google search for Process Diagram](https://www.google.com/search?q=process+diagram)
+# Software Process Models
 
-A single-threaded process has one thread of execution, while a multithreaded process has multiple threads of execution.
+## The waterfall model
 
-## Benefits of Multithreading
----------------------------
+- Plan-driven model with separate and distinct phases of specification and development.
 
-*   **Responsiveness**: Multithreading allows continued execution of other threads if one thread is blocked, making it especially important for user interfaces.
-*   **Resource Sharing**: Threads share resources of the process, making it easier than shared memory or message passing.
-*   **Economy**: Thread creation is cheaper than process creation, and thread switching has lower overhead than context switching.
-*   **Scalability**: A process can take advantage of multiprocessor architectures with multithreading.
+## Incremental development
 
-## User Threads and Kernel Threads
-----------------------------------
+- Specification, development, and validation are interleaved. May be plan-driven or agile.
 
-*   **User Threads**: Management is done by a user-level threads library.
-*   **Kernel Threads**: Supported by the kernel.
+## Integration and configuration
 
-### Thread Libraries
+- The system is assembled from existing configurable components. May be plan-driven or agile.
 
-*   POSIX Pthreads
-*   Windows threads
-*   Java threads
+In practice, most large systems are developed using a process that incorporates elements from all of these models.
 
-### Examples of Operating Systems
+### The Waterfall Model Phases
 
-*   Windows
-*   Solaris
-*   Linux
-*   Tru64 UNIX
-*   Mac OS X
+- There are separate identified phases in the waterfall model:
+    - Requirements analysis and definition
+    - System and software design
+    - Implementation and unit testing
+    - Integration and system testing
+    - Operation and maintenance
 
-## Multithreading Models
-------------------------
+### Main drawback of the waterfall model
 
-*   **Many-to-One**: Many user-level threads are mapped to a single kernel thread.
-*   **One-to-One**: Each user-level thread maps to a kernel thread.
-*   **Many-to-Many**: Many user-level threads are mapped to many kernel threads.
+- The difficulty of accommodating change after the process is underway. In principle, a phase has to be complete before moving onto the next phase.
 
-## Many-to-One Model
---------------------
+### Waterfall Model Problems
 
-*   One thread blocking causes all threads to block.
-*   Multiple threads may not run in parallel on multicore systems because only one can be in the kernel at a time.
+- Inflexible partitioning of the project into distinct stages makes it difficult to respond to changing customer requirements.
+- Therefore, this model is only appropriate when the requirements are well-understood and changes will be fairly limited during the design process.
+- Few business systems have stable requirements.
 
-## One-to-One Model
-------------------
+### The Waterfall Model
 
-*   Each user-level thread maps to a kernel thread.
-*   Creating a user-level thread creates a kernel thread.
-*   More concurrency than many-to-one, but the number of threads per process may be restricted due to overhead.
+- Mostly used for large systems engineering projects where a system is developed at several sites.
+- In those circumstances, the plan-driven nature of the waterfall model helps coordinate the work.
 
-## Many-to-Many Model
---------------------
+## Incremental development
 
-*   Allows many user-level threads to be mapped to many kernel threads.
-*   Allows the operating system to create a sufficient number of kernel threads.
+The cost of accommodating changing customer requirements is reduced.
 
-## Threading Issues
--------------------
+- The amount of analysis and documentation that has to be redone is much less than is required with the waterfall model.
 
-*   **Semantics of fork() and exec() system calls**: The behavior of fork() and exec() is different in multithreaded programs.
+It is easier to get customer feedback on the development work that has been done.
 
-### Semantics of fork() and exec()
+- Customers can comment on demonstrations of the software and see how much has been implemented.
 
-*   **fork()**: Duplicates a process or creates a child process with a different process ID.
-*   **exec()**: Replaces the contents of a process with the contents of another process but with the same process ID.
+More rapid delivery and deployment of useful software to the customer is possible.
 
-### Issue
+- Customers are able to use and gain value from the software earlier than is possible with a waterfall process.
 
-*   Does fork() duplicate only the calling thread or all threads?
+## Incremental development problems
 
-### Solution
+- The process is not visible.
+    - Managers need regular deliverables to measure progress. If systems are developed quickly, it is not cost-effective to produce documents that reflect every version of the system.
+- System structure tends to degrade as new increments are added.
+    - Unless time and money is spent on refactoring to improve the software, regular change tends to corrupt its structure. Incorporating further software changes becomes increasingly difficult and costly.
 
-*   Some UNIXes have two versions of fork: one that duplicates all threads and one that duplicates only the thread that invoked the system call.
+## Integration and configuration
 
-## Thread Cancellation
-----------------------
+Based on software reuse where systems are integrated from existing components or application systems (sometimes called COTS - Commercial-off-the-shelf systems).
 
-*   **Terminating a thread before it has finished**: The thread to be cancelled is called the target thread.
-*   **Two general approaches**:
-    *   **Asynchronous cancellation**: Terminates the target thread immediately.
-    *   **Deferred cancellation**: Allows the target thread to periodically check if it should be cancelled.
+Reuse is now the standard approach for building many types of business system.
 
-### How hard is it to cancel and how is it done?
+- Reuse covered in more depth in Chapter 15.
 
-*   In situations where resources are allocated to the target thread or the target thread is sharing data with other threads.
+### Types of reusable software
 
-## Quiz
-----
+- **Stand-alone application systems** (sometimes called COTS) that are configured for use in a particular environment.
+- **Collections of objects** that are developed as a package to be integrated with a component framework such as .NET or J2EE.
+- **Web services** that are developed according to service standards and which are available for remote invocation.
 
-*   What are the multithreading models discussed in this class?
-*   What is the system call used to duplicate a process with the same process ID?
-*   exec() system call replaces the contents of a process and creates another one with the same ID - True or False?
-*   The thread to be cancelled is known as ...?
+# Reuse-oriented software engineering
+
+**Key process stages**
+
+- Requirements specification
+- Software discovery and evaluation
+- Requirements refinement
+- Application system configuration
+- Component adaptation and integration
+
+**Advantages and disadvantages**
+
+- Reduced costs and risks as less software is developed from scratch
+- Faster delivery and deployment of system
+- But requirements compromises are inevitable so system may not meet real needs of users
+- Loss of control over evolution of reused system elements
+
+**Process activities**
+
+- Real software processes are inter-leaved sequences of technical, collaborative and managerial activities with the overall goal of specifying, designing, implementing and testing a software system.
+- The four basic process activities of specification, development, validation and evolution are organized differently in different development processes.
+    - For example, in the waterfall model, they are organized in sequence, whereas in incremental development they are interleaved.
+
+# The Requirements Engineering Process
+
+**Software specification:**
+
+The process of establishing what services are required and the constraints on the system's operation and development.
+
+**Requirements engineering process:**
+
+- **Requirements elicitation and analysis:**
+    - What do the system stakeholders require or expect from the system?
+- **Requirements specification:**
+    - Defining the requirements in detail
+- **Requirements validation:**
+    - Checking the validity of the requirements
+
+# Software Design and Implementation
+
+The process of converting the system specification into an executable system.
+
+**Software design:**
+
+- Design a software structure that realises the specification
+
+**Implementation:**
+
+- Translate this structure into an executable program
+
+The activities of design and implementation are closely related and may be inter-leaved.
+
+# A General Model of the Design Process
+
+**Design activities:**
+
+- **Architectural design:**
+    - Identify the overall structure of the system, the principal components (subsystems or modules), their relationships and how they are distributed
+- **Database design:**
+    - Design the system data structures and how these are to be represented in a database
+- **Interface design:**
+    - Define the interfaces between system components
+- **Component selection and design:**
+    - Search for reusable components. If unavailable, design how it will operate
+
+### System Implementation
+
+The software is implemented either by developing a program or programs or by configuring an application system.
+
+Design and implementation are interleaved activities for most types of software system.
+
+Programming is an individual activity with no standard process.
+
+Debugging is the activity of finding program faults and correcting these faults.
+
+### Software Validation
+
+Verification and validation (V & V) is intended to show that a system conforms to its specification and meets the requirements of the system customer.
+
+Involves checking and review processes and system testing.
+
+System testing involves executing the system with test cases that are derived from the specification of the real data to be processed by the system.
+
+Testing is the most commonly used V & V activity.
+
+### Stages of Testing
+
+### Component Testing
+
+- Individual components are tested independently.
+- Components may be functions or objects or coherent groupings of these entities.
+
+### System Testing
+
+- Testing of the system as a whole. Testing of emergent properties is particularly important.
+
+### Customer Testing
+
+- Testing with customer data to check that the system meets the customer’s needs.
+
+# Software Evolution
+
+Software is inherently flexible and can change. As requirements change through changing business circumstances, the software that supports the business must also evolve and change. Although there has been a demarcation between development and evolution (maintenance) this is increasingly irrelevant as fewer and fewer systems are completely new.
+
+## Coping with change
+
+Change is inevitable in all large software projects. Business changes lead to new and changed system requirements. New technologies open up new possibilities for improving implementations. Changing platforms require application changes. Change leads to rework so the costs of change include both rework (e.g. re-analysing requirements) as well as the costs of implementing new functionality.
+
+**Reducing the costs of rework**
+
+- **Change anticipation**, where the software process includes activities that can anticipate possible changes before significant rework is required. For example, a prototype system may be developed to show some key features of the system to customers.
+- **Change tolerance**, where the process is designed so that changes can be accommodated at relatively low cost. This normally involves some form of incremental development. Proposed changes may be implemented in increments that have not yet been developed. If this is impossible, then only a single increment (a small part of the system) may have to be altered to incorporate the change.
+
+### Coping with changing requirements
+
+**System prototyping**, where a version of the system or part of the system is developed quickly to check the customer's requirements and the feasibility of design decisions. This approach supports change anticipation.
+
+**Incremental delivery**, where system increments are delivered to the customer for comment and experimentation. This supports both change avoidance and change tolerance.
+
+# Software Prototyping
+
+A prototype is an initial version of a system used to demonstrate concepts and try out design options.
+
+A prototype can be used in:
+
+- The requirements engineering process to help with requirements elicitation and validation;
+- In design processes to explore options and develop a UI design;
+- In the testing process to run back-to-back tests.
+
+**Benefits of Prototyping**
+
+- Improved system usability.
+- A closer match to users' real needs.
+- Improved design quality.
+- Improved maintainability.
+- Reduced development effort.
+
+**Throw away prototypes**
+
+Prototypes should be discarded after development as they are not a good basis for a production system:
+
+- It may be impossible to tune the system to meet non-functional requirements;
+- Prototypes are normally undocumented;
+- The prototype structure is usually degraded through rapid change;
+- The prototype probably will not meet normal organisational quality standards.
+
+**Incremental delivery**
+
+Rather than deliver the system as a single delivery, the development and delivery is broken down into increments with each increment delivering part of the required functionality.
+
+- User requirements are prioritised and the highest priority requirements are included in early increments.
+- Once the development of an increment is started, the requirements are frozen though requirements for later increments can continue to evolve.
+
+**Incremental development and delivery**
+
+- **Incremental development**
+    - Develop the system in increments and evaluate each increment before proceeding to the development of the next increment;
+    - Normal approach used in agile methods;
+    - Evaluation done by user/customer proxy.
+- **Incremental delivery**
+    - Deploy an increment for use by end-users;
+    - More realistic evaluation about practical use of software;
+    - Difficult to implement for replacement systems as increments have less functionality than the system being replaced.
+
+**Incremental delivery advantages**
+
+- Customer value can be delivered with each increment so system functionality is available earlier.
+- Early increments act as a prototype to help elicit requirements for later increments.
+- Lower risk of overall project failure.
+- The highest priority system services tend to receive the most testing.
+
+**Incremental delivery problems**
+
+- Most systems require a set of basic facilities that are used by different parts of the system.
+- As requirements are not defined in detail until an increment is to be implemented, it can be hard to identify common facilities that are needed by all increments.
+- The essence of iterative processes is that the specification is developed in conjunction with the software.
+    - However, this conflicts with the procurement model of many organizations, where the complete system specification is part of the system development contract.
+
+# Process Improvement
+
+Many software companies have turned to software process improvement as a way of enhancing the quality of their software, reducing costs or accelerating their development processes.
+
+Process improvement means understanding existing processes and changing these processes to increase product quality and/or reduce costs and development time.
+
+**Approaches to improvement**
+
+- The **process maturity approach**, which focuses on improving process and project management and introducing good software engineering practice.
+    - The level of process maturity reflects the extent to which good technical and management practice has been adopted in organizational software development processes.
+- The **agile approach**, which focuses on iterative development and the reduction of overheads in the software process.
+    - The primary characteristics of agile methods are rapid delivery of functionality and responsiveness to changing customer requirements.
+
+**Process improvement activities**
+
+### Process Measurement
+
+- You measure one or more attributes of the software process or product. These measurements form a baseline that helps you decide if process improvements have been effective.
+
+### Process Analysis
+
+- The current process is assessed, and process weaknesses and bottlenecks are identified. Process models (sometimes called process maps) that describe the process may be developed.
+
+### Process Change
+
+- Process changes are proposed to address some of the identified process weaknesses. These are introduced, and the cycle resumes to collect data about the effectiveness of the changes.
+
+# Process Measurement
+
+- Whenever possible, quantitative process data should be collected.
+    - However, where organisations do not have clearly defined process standards, this is very difficult as you don't know what to measure. A process may have to be defined before any measurement is possible.
+- Process measurements should be used to assess process improvements.
+    - But this does not mean that measurements should drive the improvements. The improvement driver should be the organizational objectives.
+
+# Process Metrics
+
+### Time Taken for Process Activities
+
+- E.g., calendar time or effort to complete an activity or process.
+
+### Resources Required for Processes or Activities
+
+- E.g., total effort in person-days.
+
+### Number of Occurrences of a Particular Event
+
+- E.g., number of defects discovered.
+
+# Capability Maturity Levels
+
+### The SEI Capability Maturity Model
+
+- **Initial**: Essentially uncontrolled
+- **Repeatable**: Product management procedures defined and used
+- **Defined**: Process management procedures and strategies defined and used
+- **Managed**: Quality management strategies defined and used
+- **Optimising**: Process improvement strategies defined and used
+
+# Software Processes
+
+**Key points**
+
+- Software processes are the activities involved in producing a software system.
+- Software process models are abstract representations of these processes.
+- General process models describe the organization of software processes.
+    - Examples of general models include the ‘waterfall’ model, incremental development, and reuse-oriented development.
+- Requirements engineering is the process of developing a software specification.
+
+**Design and Implementation Processes**
+
+- Design and implementation processes are concerned with transforming a requirements specification into an executable software system.
+- Software validation is the process of checking that the system conforms to its specification and that it meets the real needs of the users of the system.
+- Software evolution takes place when you change existing software systems to meet new requirements. The software must evolve to remain useful.
+    - Processes should include activities such as prototyping and incremental delivery to cope with change.
+
+**Process Improvement**
+
+- Processes may be structured for iterative development and delivery so that changes may be made without disrupting the system as a whole.
+- The principal approaches to process improvement are agile approaches, geared to reducing process overheads, and maturity-based approaches based on better process management and the use of good software engineering practice.
+- The SEI process maturity framework identifies maturity levels that essentially correspond to the use of good software engineering practice.
+
+---
+
