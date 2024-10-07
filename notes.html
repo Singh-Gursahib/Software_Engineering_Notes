@@ -303,6 +303,7 @@
                 
                 const data = await response.json();
                 answerDiv.textContent = data.candidates[0].content.parts[0].text;
+                console.log(data.candidates[0].content.parts[0].text);
             } catch (error) {
                 console.error('Error:', error);
                 answerDiv.textContent = 'An error occurred while fetching the answer. Please check your API key and try again.';

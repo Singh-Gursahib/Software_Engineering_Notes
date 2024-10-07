@@ -1,0 +1,441 @@
+# Lecture Notes: Operating Systems
+
+## Process Management
+
+### Process State
+
+As a process executes, it changes state:
+
+- **New**: The process is being created.
+- **Running**: Instructions are being executed.
+- **Waiting**: The process is waiting for some event to occur.
+- **Ready**: The process is waiting to be assigned to a processor.
+- **Terminated**: The process has finished execution.
+
+### Process State Diagram
+
+*A diagram illustrating the transitions between process states can be inserted here.*
+
+### Process Control Block (PCB)
+
+Each process is represented in the operating system by a **Process Control Block (PCB)**. The PCB contains the following information:
+
+- **Process State**: Current state (e.g., running, waiting).
+- **Process Number**: Unique identifier for the process.
+- **Program Counter**: Address of the next instruction to execute.
+- **CPU Registers**: Contents of all process-centric registers.
+- **CPU Scheduling Information**: Priorities, scheduling queue pointers.
+- **Memory Management Information**: Memory allocated to the process.
+- **Accounting Information**: CPU usage, elapsed time, time limits.
+- **I/O Status Information**: I/O devices allocated to the process, list of open files.
+
+### Process Scheduling
+
+To maximize CPU utilization and enable multitasking, the operating system uses process scheduling. The **process scheduler** selects among available processes for execution on the CPU. It maintains several scheduling queues:
+
+- **Job Queue**: Set of all processes in the system.
+- **Ready Queue**: Set of all processes residing in main memory, ready and waiting to execute.
+- **Device Queues**: Set of processes waiting for an I/O device.
+
+Processes migrate among the various queues during their lifecycle.
+
+### Schedulers
+
+Operating systems employ different types of schedulers:
+
+- **Short-Term Scheduler (CPU Scheduler)**:
+    - Selects which process should be executed next.
+    - Invoked frequently (every few milliseconds).
+    - Must be fast due to its frequent invocation.
+- **Long-Term Scheduler (Job Scheduler)**:
+    - Decides which processes are brought into the ready queue.
+    - Invoked less frequently (seconds or minutes).
+    - Controls the degree of multiprogramming.
+
+### Context Switch
+
+When the CPU switches from one process to another, a **context switch** occurs:
+
+- **Save State**: The system saves the state of the old process in its PCB.
+- **Load State**: The state of the new process is loaded from its PCB.
+
+Context switching is overhead because the system does no productive work during the switch. The time it takes depends on hardware support.
+
+## Operations on Processes
+
+The operating system provides mechanisms for:
+
+- **Process Creation**
+- **Process Termination**
+
+### Process Creation
+
+Processes can create other processes, forming a hierarchy or tree of processes. The creating process is called the **parent**, and the new process is the **child**.
+
+- **Resource Sharing Options**:
+    - Parent and child share all resources.
+    - Parent and child share a subset of resources.
+    - Parent and child share no resources.
+- **Execution Options**:
+    - Parent and child execute concurrently.
+    - Parent waits until the child terminates.
+- **Address Space Options**:
+    - Child is a duplicate of the parent.
+    - Child has a new program loaded into it.
+
+**UNIX Examples**:
+
+- **`fork()`**: Creates a new process (child).
+- **`exec()`**: Used after `fork()` to replace the process's memory space with a new program.
+
+### Process Termination
+
+A process terminates when it finishes executing its final statement and asks the operating system to delete it using the **`exit()`** system call.
+
+- **Return Status**: The process can return status data to its parent via the **`wait()`** system call.
+- **Resource Deallocation**: The operating system deallocates all resources used by the process.
+
+**Parent Termination of Child Processes**:
+
+- A parent can terminate its child processes using the **`abort()`** system call.
+- Reasons for termination:
+    - Child has exceeded allocated resources.
+    - Task assigned to the child is no longer required.
+    - Parent is terminating, and the system does not allow orphaned processes.
+
+**Process Termination Scenarios**:
+
+- **Cascading Termination**: If a parent terminates, some systems automatically terminate all its children.
+- **Zombie Process**: A process that has terminated but whose parent has not called **`wait()`**.
+- **Orphan Process**: A process whose parent has terminated without invoking **`wait()`**.
+
+## Interprocess Communication (IPC)
+
+Processes may be:
+
+- **Independent**: Cannot affect or be affected by other processes.
+- **Cooperating**: Can affect or be affected by other processes.
+
+**Reasons for Process Cooperation**:
+
+- Information sharing.
+- Computation speedup.
+- Modularity.
+- Convenience.
+
+Cooperating processes require **Interprocess Communication (IPC)** mechanisms:
+
+- **Shared Memory**
+- **Message Passing**
+
+### Shared Memory
+
+Processes share a region of memory for communication.
+
+- **Characteristics**:
+    - Fast communication as it avoids kernel intervention.
+    - Requires synchronization mechanisms (e.g., semaphores, mutexes) to prevent data inconsistency.
+
+### Message Passing
+
+Processes communicate by sending and receiving messages.
+
+- **Characteristics**:
+    - Useful for distributed systems.
+    - The operating system manages the communication.
+    - Can be implemented using direct or indirect communication.
+
+### Direct Communication
+
+Processes must explicitly name each other to send or receive messages.
+
+- **Syntax**:
+    - **`send(P, message)`**: Send a message to process **P**.
+    - **`receive(Q, message)`**: Receive a message from process **Q**.
+- **Properties**:
+    - Links are established automatically.
+    - One link per pair of processes.
+    - Links are usually bi-directional.
+
+### Indirect Communication
+
+Processes use mailboxes (ports) to communicate.
+
+- **Syntax**:
+    - **`send(MailboxID, message)`**
+    - **`receive(MailboxID, message)`**
+- **Operations**:
+    - Create a new mailbox.
+    - Send and receive messages through mailboxes.
+    - Destroy a mailbox.
+- **Properties**:
+    - Links are established if processes share a mailbox.
+    - Multiple processes can share a mailbox.
+    - Links can be unidirectional or bi-directional.
+
+## Threads
+
+### Thread Basics
+
+A **thread** is a basic unit of CPU utilization, consisting of:
+
+- **Thread ID**
+- **Program Counter**
+- **Register Set**
+- **Stack**
+
+Threads within the same process share:
+
+- **Code Section**
+- **Data Section**
+- **Operating System Resources** (e.g., open files)
+
+### Single and Multithreaded Processes
+
+- **Single-threaded Process**: Has one thread of control.
+- **Multithreaded Process**: Has multiple threads within the same process.
+
+### Benefits of Multithreading
+
+- **Responsiveness**: Allows continued execution if part of the process is blocked.
+- **Resource Sharing**: Threads share resources, simplifying communication.
+- **Economy**: Lower overhead than process creation and context switching.
+- **Scalability**: Efficient utilization of multiprocessor architectures.
+
+### User Threads vs. Kernel Threads
+
+- **User Threads**: Managed by a user-level library.
+    - Examples: POSIX Pthreads, Java threads.
+- **Kernel Threads**: Supported and managed directly by the operating system.
+    - Examples: Windows threads, Linux threads.
+
+### Multithreading Models
+
+Defines the relationship between user and kernel threads:
+
+### Many-to-One Model
+
+- **Description**: Many user-level threads mapped to a single kernel thread.
+- **Advantages**:
+    - Efficient thread management.
+- **Disadvantages**:
+    - Entire process blocks if one thread blocks.
+    - Cannot run threads in parallel on multiprocessors.
+
+### One-to-One Model
+
+- **Description**: Each user-level thread maps to a kernel thread.
+- **Advantages**:
+    - Allows parallelism on multiprocessors.
+- **Disadvantages**:
+    - Overhead of creating kernel threads.
+    - Limited number of threads due to system constraints.
+
+### Many-to-Many Model
+
+- **Description**: Many user-level threads mapped to many kernel threads.
+- **Advantages**:
+    - Combines benefits of both models.
+    - Allows for greater concurrency.
+- **Disadvantages**:
+    - More complex to implement.
+
+### Threading Issues
+
+### Semantics of `fork()` and `exec()`
+
+- **`fork()` in Multithreaded Programs**:
+    - **Two Versions**:
+        - **`fork()` duplicates all threads**: The child process inherits all threads from the parent.
+        - **`fork()` duplicates only the calling thread**: Only the thread that invoked `fork()` is duplicated.
+    - **Usage Considerations**:
+        - If `exec()` is called immediately after `fork()`, duplicating only the calling thread is sufficient.
+        - If the child continues to execute without `exec()`, duplicating all threads may be necessary.
+
+### Thread Cancellation
+
+- **Definition**: Terminating a thread before it finishes execution.
+- **Target Thread**: The thread to be canceled.
+- **Cancellation Types**:
+    - **Asynchronous Cancellation**: Immediate termination of the target thread.
+    - **Deferred Cancellation**: Target thread periodically checks if it should terminate.
+- **Issues**:
+    - Resource deallocation.
+    - Consistency of shared data.
+    - Avoiding deadlocks and race conditions.
+
+## CPU Scheduling
+
+### Basic Concepts
+
+- **Multiprogramming**: Maximizes CPU utilization by organizing jobs so that the CPU always has one to execute.
+- **CPU–I/O Burst Cycle**: Process execution consists of cycles of CPU execution and I/O wait.
+- **CPU Burst**: Period of time the process uses the CPU.
+- **I/O Burst**: Period of time the process waits for I/O operations.
+
+### CPU Scheduler
+
+- **Role**: Selects a process from the ready queue and allocates the CPU.
+- **Preemptive Scheduling**: CPU can be taken away from a process.
+- **Non-Preemptive Scheduling**: Process holds the CPU until it releases it voluntarily.
+
+### Dispatcher
+
+- **Function**: Gives control of the CPU to the process selected by the scheduler.
+- **Tasks**:
+    - Context switching.
+    - Switching to user mode.
+    - Jumping to the proper location in the user program.
+- **Dispatch Latency**: The time it takes for the dispatcher to stop one process and start another.
+
+### Scheduling Criteria
+
+- **CPU Utilization**: Aim to keep the CPU as busy as possible.
+- **Throughput**: Number of processes completed per time unit.
+- **Turnaround Time**: Total time taken from submission to completion of a process.
+- **Waiting Time**: Time a process spends waiting in the ready queue.
+- **Response Time**: Time from submission of a request until the first response is produced.
+
+### Scheduling Algorithms
+
+### First-Come, First-Served (FCFS) Scheduling
+
+- **Description**: Processes are scheduled in the order they arrive.
+- **Characteristics**:
+    - Simple and easy to implement.
+    - Non-preemptive.
+    - Can lead to the **convoy effect** where short processes wait behind long ones.
+
+**Steps to Solve FCFS Scheduling Problems**:
+
+1. **List Processes**: Note arrival and burst times.
+2. **Order Processes**: Based on arrival times.
+3. **Calculate Start and Finish Times**: For each process.
+4. **Determine Waiting Times**: Start time minus arrival time.
+5. **Compute Average Waiting Time**: Sum of waiting times divided by the number of processes.
+
+### Shortest Job First (SJF) Scheduling
+
+- **Description**: Processes with the shortest burst time are scheduled first.
+- **Characteristics**:
+    - Can be preemptive (Shortest Remaining Time First) or non-preemptive.
+    - Optimal for minimizing average waiting time.
+    - Requires accurate knowledge of burst times.
+
+**Steps to Solve SJF Scheduling Problems**:
+
+1. **List Processes**: Include arrival and burst times.
+2. **At Each Time Quantum**:
+    - Select the process with the shortest burst time from those that have arrived.
+3. **Calculate Start, Finish, and Waiting Times**.
+4. **Compute Average Waiting Time**.
+
+### Round Robin (RR) Scheduling
+
+- **Description**: Processes are assigned CPU time slices in a cyclic order.
+- **Characteristics**:
+    - Preemptive.
+    - Time quantum impacts performance.
+    - Balances fairness and response time.
+
+**Steps to Solve RR Scheduling Problems**:
+
+1. **Set Time Quantum**: Choose an appropriate time slice.
+2. **Initialize Ready Queue**: Based on arrival times.
+3. **Execute Processes**:
+    - Run each process for a maximum of one time quantum.
+    - If a process's burst time is less than the time quantum, it finishes execution.
+    - Otherwise, it is placed at the end of the ready queue.
+4. **Repeat Until All Processes Complete**.
+5. **Calculate Waiting and Turnaround Times**.
+
+### Algorithm Evaluation
+
+To select an appropriate CPU scheduling algorithm, we evaluate based on the scheduling criteria.
+
+**Deterministic Modeling**:
+
+- Uses predefined workload to evaluate algorithms.
+- Simple but limited to specific scenarios.
+
+**Steps for Evaluation**:
+
+1. **Define Workload**: Specify processes with their arrival and burst times.
+2. **Apply Scheduling Algorithms**: Perform scheduling using different algorithms.
+3. **Calculate Performance Metrics**: Waiting time, turnaround time, etc.
+4. **Compare Results**: Determine which algorithm performs best based on criteria.
+
+## Example Activity
+
+Consider the following processes:
+
+| Process ID | Arrival Time | Burst Time |
+| --- | --- | --- |
+| P1 | 0 | 5 |
+| P2 | 1 | 7 |
+| P3 | 3 | 4 |
+
+Determine the completion order of P1, P2, and P3 using the following scheduling algorithms:
+
+1. **First-Come, First-Served (FCFS)**
+2. **Shortest Job First (SJF)**
+3. **Round Robin (RR) with Time Quantum = 2**
+
+### Solution Steps
+
+### 1. First-Come, First-Served (FCFS)
+
+- **Order of Arrival**:
+    - P1 arrives at time 0.
+    - P2 arrives at time 1.
+    - P3 arrives at time 3.
+- **Execution Order**:
+    - P1 executes first (from time 0 to 5).
+    - P2 executes next (from time 5 to 12).
+    - P3 executes last (from time 12 to 16).
+- **Completion Order**: P1, P2, P3.
+
+### 2. Shortest Job First (SJF)
+
+- **At Time 0**:
+    - Only P1 has arrived; P1 starts execution.
+- **At Time 5**:
+    - P2 and P3 have arrived.
+    - P3 has a shorter burst time (4) compared to P2 (7).
+    - P3 executes next (from time 5 to 9).
+- **At Time 9**:
+    - P2 executes (from time 9 to 16).
+- **Completion Order**: P1, P3, P2.
+
+### 3. Round Robin (RR) with Time Quantum = 2
+
+- **Time Quantum**: 2 units.
+- **Execution Steps**:
+    - **Time 0-2**:
+        - P1 executes for 2 units (remaining burst: 3).
+    - **Time 2-3**:
+        - P2 has arrived; P2 executes for 1 unit (since it arrived at time 1 and only 1 unit of quantum is left before next arrival).
+    - **Time 3-4**:
+        - P3 arrives at time 3; P3 executes for 1 unit.
+    - **Time 4-6**:
+        - P1 executes for another 2 units (remaining burst: 1).
+    - **Time 6-8**:
+        - P2 executes for 2 units (remaining burst: 4).
+    - **Time 8-9**:
+        - P3 executes for 1 unit (remaining burst: 2).
+    - **Time 9-10**:
+        - P1 executes for 1 unit (completes execution).
+    - **Time 10-12**:
+        - P2 executes for 2 units (remaining burst: 2).
+    - **Time 12-14**:
+        - P3 executes for 2 units (completes execution).
+    - **Time 14-16**:
+        - P2 executes for 2 units (completes execution).
+- **Completion Order**:
+    - P1 completes at time 10.
+    - P3 completes at time 14.
+    - P2 completes at time 16.
+
+**Note**: In Round Robin, processes are interleaved, and completion order depends on their remaining burst times and the time quantum.
+
+---
