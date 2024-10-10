@@ -767,13 +767,13 @@
             const percentage = (score / quizData.length) * 100;
             let resultMessage = '';
             if (percentage === 100) {
-                resultMessage = "Perfect score! You're a logistics expert!";
+                resultMessage = "Perfect score! You're an expert!";
             } else if (percentage >= 80) {
-                resultMessage = "Great job! You have a strong understanding of logistics.";
+                resultMessage = "Great job! You have a strong understanding.";
             } else if (percentage >= 60) {
-                resultMessage = "Good effort! There's room for improvement in your logistics knowledge.";
+                resultMessage = "Good effort! There's room for improvement in your knowledge.";
             } else {
-                resultMessage = "You might want to review the material. Keep learning about logistics!";
+                resultMessage = "You might want to review the material. Keep learning!";
             }
 
             let html = `
