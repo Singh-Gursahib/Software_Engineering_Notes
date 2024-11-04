@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Panel Cleaner - Innovation in Sustainable Maintenance</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Custom Properties */
+        :root {
+            --primary-color: #0e3661;
+            --text-color: #333333;
+            --background-color: #ffffff;
+            --sidebar-width: 240px;
+            --transition-speed: 0.3s;
+            --accent-gray: #f5f5f7;
+            --font-primary: 'Poppins', sans-serif;
+            --font-secondary: 'Roboto', sans-serif;
+        }
+
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+
+        /* Base typography */
+        body {
+            font-family: var(--font-secondary);
+            line-height: 1.6;
+        }
+
+        /* Headings */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--font-primary);
+        }
+
+        /* Navigation */
+        .nav-links a {
+            font-family: var(--font-primary);
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .cta-button {
+            font-family: var(--font-primary);
+            font-weight: 500;
+        }
+
+        /* Card titles */
+        .team-card h3,
+        .feature-item h4 {
+            font-family: var(--font-primary);
+        }
+
+        /* Body text */
+        p,
+        .accordion-content,
+        table,
+        .team-role,
+        .feature-item p {
+            font-family: var(--font-secondary);
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* Layout */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--background-color);
+            border-right: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 40px 20px;
+            transform: translateX(0);
+            transition: transform var(--transition-speed) ease;
+            z-index: 1000;
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav-links {
+            list-style: none;
+            margin-top: 60px;
+        }
+
+        .nav-links li {
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.5s forwards;
+        }
+
+        .nav-links li:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .nav-links li:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .nav-links li:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 16px;
+            transition: color var(--transition-speed) ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width var(--transition-speed) ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(45deg, var(--accent-gray), #ffffff);
+            padding: 0 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin: 40px 0;
+            max-width: 800px;
+        }
+
+        .accordion-item {
+            margin-bottom: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            background: var(--accent-gray);
+        }
+
+        .accordion-header {
+            padding: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color var(--transition-speed) ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #eaeaea;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed) ease;
+            padding: 0 20px;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroFadeIn 1s forwards 0.5s;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 30px;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            margin-top: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+        }
+
+        /* Project Summary */
+        .project-summary {
+            padding: 80px 0;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        /* Features List */
+        .features-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-item {
+            padding: 20px;
+            background: var(--accent-gray);
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 60px auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: var(--primary-color);
+        }
+
+        .timeline-item {
+            margin: 40px 0;
+            position: relative;
+            width: 50%;
+            padding: 20px;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .timeline-item:nth-child(even) {
+            margin-left: 50%;
+            transform: translateX(50px);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Testing Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 40px 0;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: var(--accent-gray);
+            font-weight: 600;
+        }
+
+        /* Bar Chart */
+        .chart-container {
+            margin: 40px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            height: 300px;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .bar {
+            flex: 1;
+            background: var(--primary-color);
+            transition: height 1s ease;
+            position: relative;
+            opacity: 0;
+        }
+
+        .bar.visible {
+            opacity: 1;
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            aspect-ratio: 1;
+            background: var(--accent-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        /* Team Cards */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .team-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: var(--accent-gray);
+        }
+
+        .team-info {
+            padding: 20px;
+        }
+
+        .team-role {
+            color: var(--primary-color);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        @keyframes heroFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-item {
+                width: 100%;
+                margin-left: 20px !important;
+            }
+
+            .features-list,
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1001;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="menu-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <nav class="sidebar">
+        <div class="logo">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="var(--primary-color)">
+                <circle cx="20" cy="20" r="20" />
+            </svg>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#summary">Project Overview</a></li>
+            <li><a href="#about">About the Project</a></li>
+            <li><a href="#process">Development Process</a></li>
+            <li><a href="#team">Our Team</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Revolutionizing Solar Panel Maintenance</h1>
+                <p>Automated cleaning system for enhanced solar efficiency</p>
+                <a href="#about" class="cta-button">Learn More</a>
+            </div>
+        </section>
+
+        <!-- Project Summary -->
+        <section id="summary" class="project-summary">
+            <h2>Project Overview</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <h2>About the Project</h2>
+
+            <!-- Problem Statement -->
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header">Problem Statement</div>
+                    <div class="accordion-content">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua.</p>
+                    </div>
+                </div>
+
+                <!-- Objectives -->
+                <div class="accordion-item">
+                    <div class="accordion-header">Objectives</div>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>Increase solar panel efficiency by 30%</li>
+                            <li>Reduce water consumption by 50%</li>
+                            <li>Implement autonomous operation</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features List -->
+            <h3>Key Features</h3>
+            <ul class="features-list">
+                <li class="feature-item">
+                    <i class="fas fa-robot feature-icon"></i>
+                    <h4>Autonomous Operation</h4>
+                    <p>Fully automated cleaning cycles with smart scheduling</p>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-tint feature-icon"></i>
+                    <h4>Water Efficient</h4>
+                    <p>Minimal water usage with recycling system</p>
+                </li>
+                <li class="feature-item">
+                    <i class="fas fa-sun feature-icon"></i>
+                    <h4>Enhanced Efficiency</h4>
+                    <p>Maintains optimal solar panel performance</p>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Development Process -->
+        <section id="process">
+            <h2>Development Process</h2>
+
+            <!-- Timeline -->
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Research Phase</h3>
+                    <p>Market analysis and requirement gathering</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Design Phase</h3>
+                    <p>CAD modeling and simulation testing</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Prototyping</h3>
+                    <p>Initial prototype development and testing</p>
+                </div>
+                <div class="timeline-item">
+                    <h3>Testing</h3>
+                    <p>Performance evaluation and optimization</p>
+                </div>
+            </div>
+
+            <!-- Testing Data -->
+            <h3>Performance Data</h3>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Prototype 1</th>
+                        <th>Prototype 2</th>
+                        <th>Final Version</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cleaning Efficiency</td>
+                        <td>75%</td>
+                        <td>85%</td>
+                        <td>95%</td>
+                    </tr>
+                    <tr>
+                        <td>Water Usage</td>
+                        <td>2.5L</td>
+                        <td>1.8L</td>
+                        <td>1.2L</td>
+                    </tr>
+                    <tr>
+                        <td>Cleaning Time</td>
+                        <td>45 min</td>
+                        <td>30 min</td>
+                        <td>20 min</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Bar Chart -->
+            <div class="chart-container">
+                <h3>Efficiency Comparison</h3>
+                <div class="bar-chart">
+                    <div class="bar" style="height: 75%;" data-label="Prototype 1"></div>
+                    <div class="bar" style="height: 85%;" data-label="Prototype 2"></div>
+                    <div class="bar" style="height: 95%;" data-label="Final Version"></div>
+                </div>
+            </div>
+
+            <!-- Gallery -->
+            <h3>Prototype Gallery</h3>
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="/api/placeholder/300/300" alt="Prototype 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/300/300" alt="Prototype 2">
+                </div>
+                <div class="gallery-item">
+                    <img src="/api/placeholder/300/300" alt="Final Version">
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section id="team">
+            <h2>Our Team</h2>
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="/api/placeholder/300/300" alt="Team Member 1">
+                    </div>
+                    <div class="team-info">
+                        <h3>John Doe</h3>
+                        <div class="team-role">Team Lead</div>
+                        <p>Mechanical Design Specialist</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-image">
+                        <img src="/api/placeholder/300/300" alt="Team Member 2">
+                    </div>
+                    <div class="team-info">
+                        <h3>Jane Smith</h3>
+                        <div class="team-role">Technical Lead</div>
+                        <p>Control Systems Engineer</p>
+                    </div>
+                </div>
+                <!-- Add more team cards as needed -->
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Accordion functionality
+        const accordionHeaders = document.querySelectorAll('.accordion-header');
+
+        accordionHeaders.forEach(header => {
+            header.addEventListener('click', () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle('active');
+            });
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const section = document.querySelector(this.getAttribute('href'));
+                section.scrollIntoView({
+                    behavior: 'smooth'
+                });
+
+                // Close mobile menu after clicking if it's open
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Apply animations to sections
+        document.querySelectorAll('section').forEach(section => {
+            if (section.id !== 'home') {
+                section.style.opacity = 0;
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 1s ease, transform 1s ease';
+                observer.observe(section);
+            }
+        });
+
+        // Intersection Observer for animations
+        const observer2 = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        // Observe elements
+        document.querySelectorAll('.timeline-item, .project-summary, .bar').forEach(el => {
+            observer2.observe(el);
+        });
+
+        // Bar chart animation
+        document.querySelectorAll('.bar').forEach(bar => {
+            const height = bar.style.height;
+            bar.style.height = '0';
+            setTimeout(() => {
+                bar.style.height = height;
+            }, 800);
+        });
+
+    </script>
+</body>
+
+</html>
