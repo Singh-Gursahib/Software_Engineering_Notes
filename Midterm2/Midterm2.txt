@@ -1,0 +1,55 @@
+Problem with redundancy and diversity: Adding redundancy and diversity increases system complexity, which can lead to unanticipated interactions and dependencies, raising the risk of errors.
+
+Attributes affected by adding security features: Adding security features can negatively impact system performance, slowing response times, and usability, requiring extra user interactions.
+
+Penetration testing: Penetration testing is a security validation technique that simulates attacks on a system to uncover vulnerabilities and assess how well the system can withstand real threats.
+
+System resilience: System resilience is the ability of a system to maintain continuity of its critical services during disruptive events like equipment failures or cyberattacks.
+
+Consideration in sociotechnical resilience: Sociotechnical resilience emphasizes that resilient system design should account for not only software but also broader sociotechnical factors, including human and organizational elements.
+
+Key aspect of Application system reuse: Application system reuse involves adapting a system for various customers by leveraging built-in configuration options without altering the source code.
+
+Diversity in system dependability: Diversity enhances system dependability by reducing the likelihood of common-mode failures, as different components do not fail in the same way.
+
+Assumptions in resilience engineering about system failures: Resilience engineering assumes (1) that failures are unavoidable, (2) emphasis should be on recovery, and (3) external events, like human errors or attacks, are likely sources of failure.
+
+Two views on human error in resilience engineering: Human error is viewed through the person approach, which attributes error to individual carelessness, and the systems approach, which sees error as a result of systemic issues like high workload or poor design.
+
+Difference in software development with reuse: In traditional development, software is crafted to meet specific client needs, while reuse-based development adapts existing software components, focusing on adjusting requirements to fit pre-existing functionalities.
+
+Introduction
+
+Developing dependable systems involves addressing the specific dependability requirements of different applications. While a music app for local event information in Kamloops and an airplane control system are both technical systems, their dependability needs differ greatly due to their unique sociotechnical contexts. By considering these systems as sociotechnical, developers can account for the broader human, organizational, and environmental factors that influence each system's dependability.
+
+Problem Statement
+
+The music app focuses on user accessibility, data accuracy, and availability, while the airplane control system must prioritize safety and resilience. Viewing these systems solely as technical entities overlooks essential aspects, such as human and environmental interaction. A sociotechnical perspective addresses both technical and human factors, supporting dependable operations tailored to each system's needs.
+
+Core Analysis
+
+**Reliability and Availability**
+For the music app, reliability means accurate and up-to-date event information, while availability ensures users can access this data when needed. Failures, such as outdated information or downtime, lead to minor inconveniences but are not critical.
+
+For the airplane control system, reliability and availability are crucial for processing real-time commands without failure. Any system downtime could endanger passengers, necessitating extensive testing, redundancy, and fault-tolerant designs.
+
+**Safety and Security**
+Safety is a minor concern for the music app, where errors may lead to privacy issues or user dissatisfaction. Basic security measures, like authentication, are usually sufficient.
+
+For the airplane control system, safety is paramount, as system failure can lead to catastrophic outcomes. Rigorous security measures, including encryption and access control, are essential to ensure safe operation and prevent cyberattacks that could compromise system dependability.
+
+**Human and Organizational Factors**
+In the music app, user interaction is moderate, with usability being the main consideration. Organizational involvement is limited to developers and event organizers.
+
+The airplane control system requires coordination between pilots, air traffic controllers, engineers, and regulatory bodies. Human factors, such as workload and stress, must be considered to avoid errors. Organizational regulations also set high standards for safety and dependability, requiring human-centered controls and procedural safeguards.
+
+**Regulation and Compliance**
+The airplane control system must comply with stringent safety regulations, including extensive documentation and certification. Compliance ensures system dependability and safety, as any failure could have severe consequences. The music app, however, is not regulated in this way, focusing instead on user engagement.
+
+**Sociotechnical Perspective**
+Considering systems as sociotechnical emphasizes the interplay between people, processes, and technologies. For the music app, dependability focuses on usability and convenience, driven by user interaction. For the airplane control system, human operators, organizational processes, and regulatory compliance are key. Recognizing these systems as sociotechnical ensures that both technical and non-technical elements are integrated to mitigate risks and enhance dependability.
+
+Conclusion
+
+In conclusion, understanding the differing dependability requirements of a local music app and an airplane control system highlights the need for a sociotechnical approach. The sociotechnical perspective allows developers to consider human, organizational, and contextual factors in addition to technical aspects. For the music app, dependability revolves around usability and availability, while for the airplane control system, a rigorous approach addressing reliability, safety, and resilience is required. Recognizing these systems as sociotechnical ensures comprehensive design practices that enhance dependability according to each system’s operational context.
+
